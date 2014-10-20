@@ -1,0 +1,7 @@
+DEBUG = False
+TEMPLATE_DEBUG = False
+STATIC_ROOT = '/var/www/parker/static/'
+STATIC_URL = '/parker/static/'
+ALLOWED_HOSTS = ['127.0.0.1', ]
+LOGIN_URL="/parker/admin/"
+LOGOUT_URL="/parker/admin/logout"

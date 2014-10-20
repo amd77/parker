@@ -62,7 +62,7 @@ MEDIA_URL = ''
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
 if DEBUG:
-    STATIC_ROOT = ''
+    STATIC_ROOT = '.static/'
 else:
     STATIC_ROOT = '/var/www/parker/static/'
 
@@ -162,3 +162,8 @@ LOGGING = {
 
 LOGIN_URL="/admin/"
 LOGOUT_URL="/admin/logout"
+
+try:
+    from parker.settings_local import *
+except ImportError:
+    pass
