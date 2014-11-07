@@ -134,8 +134,8 @@ class Registro(models.Model):
             r.euros = get_tarifa(r.minutos)
             r.save()
             usuario = "(por {})".format(r.usuario_entrada) if r.usuario_entrada else ""
-            return u"Saliendo matricula '{}' desde las {} {} son {:.2f} €".format(
-                matricula, r.hora_entrada, usuario, r.euros)
+            return u"Saliendo matricula '{}' desde las {} {} hasta las {} y son {:.2f} €".format(
+                matricula, r.hora_entrada, usuario, r.hora_salida, r.euros)
 
     class Meta:
         ordering = ["-fecha_entrada"]
