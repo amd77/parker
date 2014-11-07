@@ -13,36 +13,27 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         if len(args) < 2:
             print "Linea de comandos:"
-            print "- entra matricula:     e matricula"
-            print "- sale matricula:      s matricula"
+            print "- entra matricula:     e matricula [usuario]"
+            print "- sale matricula:      s matricula [usuario]"
             print "- modifica matricula:  r matricula1 matricula2 (solo los que estan dentro)"
             return
         comando = matricula = usuario = None
+        args = list(args)
         try:
             comando = args.pop(0).lower().strip()
             matricula = args.pop(0).lower().strip()
             usuario = args.pop(0).lower().strip()
+        except IndexError as e:
+            pass
         if comando == "e":
             out = Registro.matricula_entra(matricula, usuario)
-            if not out:
-                print "ERROR matricula '{}' ya esta dentro!!".format(matricula)
-            else:
-                print "Entrando matricula '{}'".format(matricula)
         elif comando == "s":
             out = Registro.matricula_sale(matricula, usuario)
-            if out:
-                print "Saliendo matricula '{}'".format(matricula)
-            else:
-                print "ERROR matricula '{}' no esta dentro!!".format(matricula)
-
         elif comando == "r":
             out = Registro.matricula_renombra(matricula1, matricula2)
-            if out:
-                print "Renombrando matricula '{}'".format(matricula1)
-            else:
-                print "ERROR matricula '{}' no esta dentro!!".format(matricula1)
         else:
-            print "Comando '{}' no reconocido".format(comando)
+            out = "Comando '{}' no reconocido".format(comando)
+        print out
 
 
 

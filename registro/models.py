@@ -40,11 +40,19 @@ class Registro(models.Model):
     usuario_salida = models.CharField(max_length=40, blank=True, null=True)
     emitido_ticket = models.NullBooleanField()
 
+    @property
+    def hora_entrada(self):
+        return self.fecha_entrada.strftime("%X") if self.fecha_entrada else None
+
+    @property
+    def hora_salida(self):
+        return self.fecha_salida.strftime("%X") if self.fecha_salida else None
+
     def __unicode__(self):
         if not self.fecha_salida:
-            return u"{} dentro desde las {}".format(self.matricula, self.fecha_entrada)
+            return u"{} dentro desde las {}".format(self.matricula, self.hora_entrada)
         else:
-            return u"{} salio a las {}".format(self.matricula, self.fecha_salida)
+            return u"{} salio a las {}".format(self.matricula, self.hora_salida)
 
     @staticmethod
     def coches_dentro(year, month, day):
@@ -81,16 +89,21 @@ class Registro(models.Model):
 
     @staticmethod
     def matricula_entra(matricula, usuario=None):
-        dentro = Registro.objects.filter(
+        qs = Registro.objects.filter(
             matricula=matricula,
-            fecha_salida__isnull=True).count()
-        if dentro:
-            return None
-        r = Registro.objects.create(
-            matricula=matricula,
-            usuario_entrada=usuario,
-            fecha_entrada=timezone.now())
-        return r
+            fecha_salida__isnull=True)
+        if qs.count() > 0:
+            r = qs.get()
+            usuario = "(por {})".format(r.usuario_entrada) if r.usuario_entrada else ""
+            return u"La matricula '{}' ya esta dentro desde las {}!! {}".format(
+                    matricula, r.hora_entrada, usuario)
+        else:
+            r = Registro.objects.create(
+                matricula=matricula,
+                usuario_entrada=usuario,
+                fecha_entrada=timezone.now())
+            return u"Entrando matricula '{}' a las {}".format(
+                matricula, r.hora_entrada)
 
     @staticmethod
     def matricula_renombra(matricula1, matricula2):
@@ -98,11 +111,13 @@ class Registro(models.Model):
             matricula=matricula1,
             fecha_salida__isnull=True)
         if qs.count() == 0:
-            return None
-        r = qs.get()
-        r.matricula = matricula2
-        r.save()
-        return r
+            return u"No se encuentra la matricula {}".format(matricula1)
+        else:
+            r = qs.get()
+            r.matricula = matricula2
+            r.save()
+            return u"Renombrada matricula {} a {} con exito".format(
+                matricula1, matricula2)
 
     @staticmethod
     def matricula_sale(matricula, usuario=None):
@@ -110,7 +125,7 @@ class Registro(models.Model):
             matricula=matricula,
             fecha_salida__isnull=True)
         if qs.count() == 0:
-            return None
+            return u"ERROR matricula '{}' no esta dentro!!".format(matricula)
         else:
             r = qs[0]
             r.fecha_salida = timezone.now()
@@ -118,7 +133,9 @@ class Registro(models.Model):
             r.minutos = (r.fecha_salida - r.fecha_entrada).seconds/60.
             r.euros = get_tarifa(r.minutos)
             r.save()
-            return r
+            usuario = "(por {})".format(r.usuario_entrada) if r.usuario_entrada else ""
+            return u"Saliendo matricula '{}' desde las {} {} son {:.2f} €".format(
+                matricula, r.hora_entrada, usuario, r.euros)
 
     class Meta:
         ordering = ["-fecha_entrada"]
