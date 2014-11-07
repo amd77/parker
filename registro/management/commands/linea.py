@@ -17,16 +17,19 @@ class Command(BaseCommand):
             print "- sale matricula:      s matricula"
             print "- modifica matricula:  r matricula1 matricula2 (solo los que estan dentro)"
             return
-        comando = args[0].lower()
-        matricula = args[1].lower().strip()
+        comando = matricula = usuario = None
+        try:
+            comando = args.pop(0).lower().strip()
+            matricula = args.pop(0).lower().strip()
+            usuario = args.pop(0).lower().strip()
         if comando == "e":
-            out = Registro.matricula_entra(matricula)
+            out = Registro.matricula_entra(matricula, usuario)
             if not out:
                 print "ERROR matricula '{}' ya esta dentro!!".format(matricula)
             else:
                 print "Entrando matricula '{}'".format(matricula)
         elif comando == "s":
-            out = Registro.matricula_sale(matricula)
+            out = Registro.matricula_sale(matricula, usuario)
             if out:
                 print "Saliendo matricula '{}'".format(matricula)
             else:

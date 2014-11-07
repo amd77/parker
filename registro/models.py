@@ -36,6 +36,8 @@ class Registro(models.Model):
     fecha_salida = models.DateTimeField(blank=True, null=True)
     minutos = models.FloatField(blank=True, null=True)
     euros = models.FloatField(blank=True, null=True)
+    usuario_entrada = models.CharField(max_length=40, blank=True, null=True)
+    usuario_salida = models.CharField(max_length=40, blank=True, null=True)
     emitido_ticket = models.NullBooleanField()
 
     def __unicode__(self):
@@ -78,7 +80,7 @@ class Registro(models.Model):
 
 
     @staticmethod
-    def matricula_entra(matricula):
+    def matricula_entra(matricula, usuario=None):
         dentro = Registro.objects.filter(
             matricula=matricula,
             fecha_salida__isnull=True).count()
@@ -86,6 +88,7 @@ class Registro(models.Model):
             return None
         r = Registro.objects.create(
             matricula=matricula,
+            usuario_entrada=usuario,
             fecha_entrada=timezone.now())
         return r
 
@@ -102,7 +105,7 @@ class Registro(models.Model):
         return r
 
     @staticmethod
-    def matricula_sale(matricula):
+    def matricula_sale(matricula, usuario=None):
         qs = Registro.objects.filter(
             matricula=matricula,
             fecha_salida__isnull=True)
@@ -111,6 +114,7 @@ class Registro(models.Model):
         else:
             r = qs[0]
             r.fecha_salida = timezone.now()
+            r.usuario_salida = usuario
             r.minutos = (r.fecha_salida - r.fecha_entrada).seconds/60.
             r.euros = get_tarifa(r.minutos)
             r.save()
