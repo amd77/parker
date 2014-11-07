@@ -1,7 +1,8 @@
 DEBUG = False
 TEMPLATE_DEBUG = False
+ALLOWED_HOSTS = ['parker.andensinlimite.com']
 STATIC_ROOT = '/var/www/parker/static/'
-STATIC_URL = '/parker/static/'
-ALLOWED_HOSTS = ['127.0.0.1', ]
-LOGIN_URL="/parker/admin/"
-LOGOUT_URL="/parker/admin/logout"
+ADMINS = (
+    ('Superadmins', 'root@andensinlimite.com'),
+)
+MANAGERS = ADMINS
