@@ -37,6 +37,7 @@
                     <td>{{object.minutos|floatformat:0}}</td>
                     <td>{{object.euros|floatformat:2}} €</td>
                     <td>{{object.emitido_ticket|yesno:"Si,"}}</td>
+                    <td><a href="{% url 'registro_update' object.id %}">editar</a></td>
                 </tr>
                 {% endfor %}
                 <tr>

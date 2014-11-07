@@ -1,6 +1,6 @@
 # Create your views here.
 from django.utils import timezone
-from django.views.generic import View, TemplateView, ListView, RedirectView
+from django.views.generic import View, TemplateView, ListView, RedirectView, UpdateView
 from .models import Registro
 from django.core.urlresolvers import reverse
 
@@ -45,3 +45,6 @@ class VistaMes(ListView):
         context['total_recaudado'] = Registro.total_recaudado(self.year, self.month)
         return context
 
+class UpdateRegistro(UpdateView):
+    model = Registro
+    success_url = "/"
