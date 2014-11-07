@@ -165,6 +165,11 @@ LOGGING = {
 LOGIN_URL="/parker/admin/"
 LOGOUT_URL="/parker/admin/logout"
 
+import socket
+EMAIL_SUBJECT_PREFIX = "parker@" + socket.gethostname() + ": "
+SERVER_EMAIL = "parker@" + socket.getfqdn(socket.gethostname())
+
+
 try:
     from parker.settings_local import *
 except ImportError:

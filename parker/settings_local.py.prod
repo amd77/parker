@@ -1,6 +1,6 @@
 DEBUG = False
 TEMPLATE_DEBUG = False
-ALLOWED_HOSTS = ['parker.andensinlimite.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'parker.andensinlimite.com', 'andensinlimite.noip.me']
 STATIC_ROOT = '/var/www/parker/static/'
 ADMINS = (
     ('Superadmins', 'root@andensinlimite.com'),
