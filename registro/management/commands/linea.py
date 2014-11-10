@@ -12,10 +12,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         if len(args) < 2:
-            print "Linea de comandos:"
-            print "- entra matricula:     e matricula [usuario]"
-            print "- sale matricula:      s matricula [usuario]"
-            print "- modifica matricula:  r matricula1 matricula2 (solo los que estan dentro)"
+            print u"Linea de comandos:"
+            print u"- entra matricula:     e matricula [usuario]"
+            print u"- sale matricula:      s matricula [usuario]"
+            print u"- modifica matricula:  r matricula1 matricula2 (solo los que estan dentro)"
             return
         comando = matricula = usuario = None
         args = list(args)
@@ -32,8 +32,5 @@ class Command(BaseCommand):
         elif comando == "r":
             out = Registro.matricula_renombra(matricula1, matricula2)
         else:
-            out = "Comando '{}' no reconocido".format(comando)
-        print out
-
-
-
+            out = u"Comando '{}' no reconocido".format(comando)
+        print out.encode("utf-8")

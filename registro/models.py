@@ -125,7 +125,7 @@ class Registro(models.Model):
             matricula=matricula,
             fecha_salida__isnull=True)
         if qs.count() == 0:
-            return u"ERROR matricula '{}' no esta dentro!!".format(matricula)
+            return u"La matricula '{}' no esta dentro!!".format(matricula)
         else:
             r = qs[0]
             r.fecha_salida = timezone.now()
@@ -135,7 +135,8 @@ class Registro(models.Model):
             r.save()
             usuario = "(por {})".format(r.usuario_entrada) if r.usuario_entrada else ""
             return u"Saliendo matricula '{}' desde las {} {} hasta las {} y son {:.2f} €".format(
-                matricula, r.hora_entrada, usuario, r.hora_salida, r.euros)
+                matricula, r.hora_entrada, usuario, r.hora_salida, r.euros).\
+		replace("  ", " ")
 
     class Meta:
         ordering = ["-fecha_entrada"]
