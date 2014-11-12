@@ -7,34 +7,68 @@ import datetime
 # FIXME contar el numero de gente dentro segun el numero de plazas
 
 TARIFAS = [
-    (5, 0.0),
-    (30, 0.5),
-    (65, 0.9),
-    (95, 1.2),
-    (125, 1.5),
-    (155, 1.7),
-    (185, 2.0),
-    (215, 2.2),
-    (245, 2.5),
-    (275, 2.7),
-    (305, 3.0),
-    (335, 3.2),
-    (365, 3.5),
-    (600, 4.8),
+    # Esta formula es:
+    #  precio = 0                            para -5 minutos
+    #  precio = 0.50                         para 5-30 minutos
+    #  precio = 0.491 + minutos / 60 * 0.515 para 30 minutos-6 horas
+    #  precio = 4.80                         para 6-10 horas
+    #  precio = 6.00                         para +10 horas
+    (0, 0.00),
+    (6, 0.50),
+    (31, 0.60),
+    (41, 0.80),
+    (51, 0.90),
+    (61, 1.00),
+    (71, 1.10),
+    (81, 1.20),
+    (91, 1.30),
+    (101, 1.40),
+    (111, 1.50),
+    (121, 1.60),
+    (131, 1.65),
+    (141, 1.70),
+    (151, 1.80),
+    (161, 1.90),
+    (171, 2.00),
+    (181, 2.10),
+    (191, 2.15),
+    (201, 2.20),
+    (211, 2.30),
+    (221, 2.40),
+    (231, 2.50),
+    (241, 2.60),
+    (251, 2.65),
+    (261, 2.70),
+    (271, 2.80),
+    (281, 2.90),
+    (291, 3.00),
+    (301, 3.10),
+    (311, 3.15),
+    (321, 3.20),
+    (331, 3.30),
+    (341, 3.40),
+    (351, 3.50),
+    (361, 4.80),
+    (600, 6.00),
 ]
 
+
 def get_tarifa(minutos):
-    validos = filter(lambda (x,y): x >= minutos, TARIFAS)
-    if not validos:
-        return TARIFAS[-1][1]
-    else:
-        return validos[0][1]
+    ultima_tarifa = 0.0
+    for x, tarifa in TARIFAS:
+        if x <= minutos:
+            ultima_tarifa = tarifa
+        else:
+            return ultima_tarifa
+    return ultima_tarifa
+
 
 def get_month_range(year, month):
     start = datetime.date(year, month, 1)
     end = start + datetime.timedelta(days=32)
     end.replace(day=1)
     return start, end
+
 
 def get_day_range(year, month, day):
     if day <= 0:
@@ -43,6 +77,7 @@ def get_day_range(year, month, day):
         start = datetime.date(year, month, day)
         end = start + datetime.timedelta(days=1)
         return start, end
+
 
 # Create your models here.
 class Registro(models.Model):
@@ -73,34 +108,33 @@ class Registro(models.Model):
     def coches_dentro(year, month, day):
         start, end = get_day_range(year, month, day)
         return Registro.objects.filter(
-                fecha_entrada__gte=start,
-                fecha_salida__isnull=True
-            )
+            fecha_entrada__gte=start,
+            fecha_salida__isnull=True
+        )
 
     @staticmethod
     def coches_dia(year, month, day):
         start, end = get_day_range(year, month, day)
         return Registro.objects.filter(
-                fecha_entrada__gte=start,
-                fecha_entrada__lt=end
-            )
+            fecha_entrada__gte=start,
+            fecha_entrada__lt=end
+        )
 
     @staticmethod
     def coches_mes(year, month):
         start, end = get_month_range(year, month)
         return Registro.objects.filter(
-                fecha_entrada__gte=start,
-                fecha_entrada__lt=end
-            )
+            fecha_entrada__gte=start,
+            fecha_entrada__lt=end
+        )
 
     @staticmethod
     def total_recaudado(year, month, day):
         start, end = get_day_range(year, month, day)
         return Registro.objects.filter(
-                fecha_entrada__gte=start,
-                fecha_salida__lt=end
-            ).aggregate(models.Sum('euros'))['euros__sum'] or 0.0
-
+            fecha_entrada__gte=start,
+            fecha_salida__lt=end
+        ).aggregate(models.Sum('euros'))['euros__sum'] or 0.0
 
     @staticmethod
     def matricula_entra(matricula, usuario=None):
@@ -111,7 +145,7 @@ class Registro(models.Model):
             r = qs.get()
             usuario = "(por {})".format(r.usuario_entrada) if r.usuario_entrada else ""
             return u"La matricula '{}' ya esta dentro desde las {}!! {}".format(
-                    matricula, r.hora_entrada, usuario)
+                matricula, r.hora_entrada, usuario)
         else:
             r = Registro.objects.create(
                 matricula=matricula,
@@ -150,8 +184,8 @@ class Registro(models.Model):
             r.save()
             usuario = "(por {})".format(r.usuario_entrada) if r.usuario_entrada else ""
             return u"Saliendo matricula '{}' desde las {} {} hasta las {} y son {:.2f} €".format(
-                matricula, r.hora_entrada, usuario, r.hora_salida, r.euros).\
-		replace("  ", " ")
+                matricula, r.hora_entrada, usuario, r.hora_salida, r.euros
+            ).replace("  ", " ")
 
     class Meta:
         ordering = ["-fecha_entrada"]
