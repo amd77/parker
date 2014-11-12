@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 from registro.models import Registro
 from django.utils import timezone
+import os
 
 
 class Command(BaseCommand):
@@ -34,4 +36,4 @@ class Command(BaseCommand):
             out = u"Comando '{}' no reconocido".format(comando)
         print out.encode("utf-8")
         msg = u"{} [{}] {}\n".format(timezone.now(), command_line, out)
-        file("parker.log", "a").write(msg.encode("utf-8"))
+        file(os.path.join(settings.BASE_DIR, "parker.log"), "a").write(msg.encode("utf-8"))
