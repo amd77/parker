@@ -26,6 +26,8 @@
                     <th>Hora salida</th>
                     <th>Minutos</th>
                     <th>Importe</th>
+                    <th>Usuario entrada</th>
+                    <th>Usuario salida</th>
                     <th>Factura</th>
                 </tr>
                 {% for object in object_list %}
@@ -36,6 +38,8 @@
                     <td>{{object.fecha_salida|date:"TIME_FORMAT"}}</td>
                     <td>{{object.minutos|floatformat:0}}</td>
                     <td>{{object.euros|floatformat:2}} €</td>
+                    <td>{{object.usuario_entrada|default:"-"}}</td>
+                    <td>{{object.usuario_salida|default:"-"}}</td>
                     <td>{{object.emitido_ticket|yesno:"Si,"}}</td>
                 </tr>
                 {% endfor %}
@@ -46,6 +50,8 @@
                     <th>Hora salida</th>
                     <th>Minutos</th>
                     <th>Importe</th>
+                    <th>Usuario entrada</th>
+                    <th>Usuario salida</th>
                     <th>Factura</th>
                 </tr>
             </table>
