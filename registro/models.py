@@ -3,6 +3,9 @@
 from django.db import models
 from django.utils import timezone
 import datetime
+from django.utils.timezone import get_default_timezone, make_aware
+
+TZ = get_default_timezone()
 
 # FIXME contar el numero de gente dentro segun el numero de plazas
 
@@ -64,9 +67,9 @@ def get_tarifa(minutos):
 
 
 def get_month_range(year, month):
-    start = datetime.date(year, month, 1)
+    start = datetime.datetime(year, month, 1, 0, 0)
     end = start + datetime.timedelta(days=32)
-    end.replace(day=1)
+    end.replace(day=1, hour=0)
     return start, end
 
 
@@ -74,9 +77,9 @@ def get_day_range(year, month, day):
     if day <= 0:
         return get_month_range(year, month)
     else:
-        start = datetime.date(year, month, day)
+        start = datetime.datetime(year, month, day)
         end = start + datetime.timedelta(days=1)
-        return start, end
+        return make_aware(start, TZ), make_aware(end, TZ)
 
 
 # Create your models here.
@@ -105,14 +108,6 @@ class Registro(models.Model):
             return u"{} salio a las {}".format(self.matricula, self.hora_salida)
 
     @staticmethod
-    def coches_dentro(year, month, day):
-        start, end = get_day_range(year, month, day)
-        return Registro.objects.filter(
-            fecha_entrada__gte=start,
-            fecha_salida__isnull=True
-        )
-
-    @staticmethod
     def coches_dia(year, month, day):
         start, end = get_day_range(year, month, day)
         return Registro.objects.filter(
@@ -121,20 +116,34 @@ class Registro(models.Model):
         )
 
     @staticmethod
-    def coches_mes(year, month):
-        start, end = get_month_range(year, month)
-        return Registro.objects.filter(
-            fecha_entrada__gte=start,
-            fecha_entrada__lt=end
-        )
+    def estadisticas_dia(year, month, day):
+        qs = Registro.coches_dia(year, month, day)
+        total = qs.count()
+        dentro = qs.filter(fecha_salida__isnull=True).count()
+        recaudado = qs.aggregate(models.Sum('euros'))['euros__sum']
+        return {
+            'coches_dentro': dentro,
+            'coches_total': total,
+            'coches_fuera': total - dentro,
+            'total_recaudado': recaudado or 0.0,
+        }
 
     @staticmethod
-    def total_recaudado(year, month, day):
-        start, end = get_day_range(year, month, day)
-        return Registro.objects.filter(
-            fecha_entrada__gte=start,
-            fecha_salida__lt=end
-        ).aggregate(models.Sum('euros'))['euros__sum'] or 0.0
+    def estadisticas_mes(year, month):
+        start, end = get_day_range(year, month)
+        qs = Registro.objects.filter(
+                fecha_entrada__gte=start,
+                fecha_entrada__lt=end
+            )
+        total = qs.count()
+        dentro = qs.filter(fecha_salida__isnull=True).count()
+        recaudado = qs.aggregate(models.Sum('euros'))['euros__sum']
+        return {
+            'coches_dentro': dentro,
+            'coches_total': total,
+            'coches_fuera': total - dentro,
+            'total_recaudado': recaudado or 0.0,
+        }
 
     @staticmethod
     def matricula_entra(matricula, usuario=None):
