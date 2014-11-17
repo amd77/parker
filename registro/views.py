@@ -32,9 +32,9 @@ class VistaMes(ListView):
     def get_queryset(self):
         self.year = int(self.kwargs["year"], 10)
         self.month = int(self.kwargs["month"], 10)
-        return Registro.coches_dia(self.year, self.month, self.day)
+        return Registro.coches_dia(self.year, self.month)
 
     def get_context_data(self, **kwargs):
-        context = super(VistaDia, self).get_context_data(**kwargs)
-        context.update(Registro.estadisticas_dia(self.year, self.month))
+        context = super(VistaMes, self).get_context_data(**kwargs)
+        context.update(Registro.estadisticas_mes(self.year, self.month))
         return context

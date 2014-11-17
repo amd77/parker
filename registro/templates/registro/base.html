@@ -26,12 +26,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">{% block projectname %}Parking Frigorificos La Esperanza{% endblock projectname %}</a>
+          <a class="navbar-brand" href="{% url home %}">{% block projectname %}Parking Frigorificos La Esperanza{% endblock projectname %}</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Resumen diario</a></li>
-            <li><a href="#about">Resumen Mensual</a></li>
+            <li {% if not data %}class="active"{% endif %}><a href="{% url dia_ymd today.year today.month today.day %}">Resumen diario</a></li>
+            <li {% if data %}class="active"{% endif %}><a href="{% url dia_ym today.year today.month %}">Resumen Mensual</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>

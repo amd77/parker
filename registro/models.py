@@ -108,7 +108,7 @@ class Registro(models.Model):
             return u"{} salio a las {}".format(self.matricula, self.hora_salida)
 
     @staticmethod
-    def coches_dia(year, month, day):
+    def coches_dia(year, month, day=None):
         start, end = get_day_range(year, month, day)
         return Registro.objects.filter(
             fecha_entrada__gte=start,
@@ -131,19 +131,31 @@ class Registro(models.Model):
 
     @staticmethod
     def estadisticas_mes(year, month):
-        start, end = get_day_range(year, month)
-        qs = Registro.objects.filter(
-                fecha_entrada__gte=start,
-                fecha_entrada__lt=end
-            )
-        total = qs.count()
-        dentro = qs.filter(fecha_salida__isnull=True).count()
-        recaudado = qs.aggregate(models.Sum('euros'))['euros__sum']
+        qs_total = Registro.coches_dia(year, month)
+        total_recaudado = 0.0
+        out = []
+        for i in range(1, 31):
+            qs = qs_total.filter(fecha_entrada__day=i)
+            total = qs.count()
+            if total:
+                dentro = qs.filter(fecha_salida__isnull=True).count()
+                recaudado = qs.aggregate(models.Sum('euros'))['euros__sum'] or 0.0
+                out.append({
+                    'today': datetime.date(year, month, i),
+                    'dia': i,
+                    'coches_dentro': dentro,
+                    'coches_total': total,
+                    'coches_fuera': total - dentro,
+                    'total_recaudado': recaudado,
+                })
+                total_recaudado += recaudado
+        today = datetime.date.today()
+        if today.year != year or today.month != month:
+            today = datetime.date(year, month, 1)
         return {
-            'coches_dentro': dentro,
-            'coches_total': total,
-            'coches_fuera': total - dentro,
-            'total_recaudado': recaudado or 0.0,
+            "today": today,
+            "total_recaudado": total_recaudado,
+            "data": out,
         }
 
     @staticmethod
