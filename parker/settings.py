@@ -162,8 +162,9 @@ LOGGING = {
     }
 }
 
-LOGIN_URL="/parker/admin/"
-LOGOUT_URL="/parker/admin/logout"
+LOGIN_URL="/parker/login"
+LOGOUT_URL="/parker/logout"
+LOGIN_REDIRECT_URL="/parker/"
 
 import socket
 EMAIL_SUBJECT_PREFIX = "parker@" + socket.gethostname() + ": "

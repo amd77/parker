@@ -28,12 +28,15 @@
           </button>
           <a class="navbar-brand" href="{% url 'home' %}">{% block projectname %}Parking Frigorificos La Esperanza{% endblock projectname %}</a>
         </div>
+        {% if today %}
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li {% if not data %}class="active"{% endif %}><a href="{% url 'dia_ymd' today.year today.month today.day %}">Resumen diario</a></li>
             <li {% if data %}class="active"{% endif %}><a href="{% url 'dia_ym' today.year today.month %}">Resumen Mensual</a></li>
+            <li><a href="{% url 'logout' %}">Salir de la sesión</a></li>
           </ul>
         </div><!--/.nav-collapse -->
+        {% endif %}
       </div>
     </div>
 
