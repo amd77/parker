@@ -122,6 +122,7 @@ class Registro(models.Model):
         dentro = qs.filter(fecha_salida__isnull=True).count()
         recaudado = qs.aggregate(models.Sum('euros'))['euros__sum']
         return {
+            'today': datetime.date(year, month, day),
             'coches_dentro': dentro,
             'coches_total': total,
             'coches_fuera': total - dentro,
