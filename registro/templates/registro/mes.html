@@ -11,29 +11,28 @@
         <div class="container-fluid">
             <table class="table table-striped table-hover">
                 <tr>
-                    <th colspan="2">Día</th>
+                    <th>Día</th>
                     <th>Coches total</th>
-                    <th>Coches dentro</th>
                     <th>Coches fuera</th>
+                    <th>Coches dentro</th>
                     <th>Importe</th>
                     <th>Ver mas</th>
                 </tr>
                 {% for object in data %}
                 <tr>
-                    <td>{{object.today|date:"l"}}</td>
-                    <td>{{object.today|date:"d"}}</td>
+                    <td>{{object.today|date:"d l"}}</td>
                     <td>{{object.coches_total}}</td>
-                    <td>{{object.coches_dentro}}</td>
                     <td>{{object.coches_fuera}}</td>
+                    <td>{{object.coches_dentro}}</td>
                     <td>{{object.total_recaudado|floatformat:2}} €</td>
-                    <td><a href="{% url dia_ymd today.year today.month object.dia %}">Ver más</a></td>
+                    <td><a href="{% url 'dia_ymd' today.year today.month object.dia %}">Ver más</a></td>
                 </tr>
                 {% endfor %}
                 <tr>
-                    <th colspan="2">Día</th>
-                    <th>Coches dentro</th>
+                    <th>Día</th>
                     <th>Coches total</th>
                     <th>Coches fuera</th>
+                    <th>Coches dentro</th>
                     <th>Importe</th>
                     <th>Ver mas</th>
                 </tr>
