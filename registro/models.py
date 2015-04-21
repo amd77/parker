@@ -3,9 +3,8 @@
 from django.db import models
 from django.utils import timezone
 import datetime
-from django.utils.timezone import get_default_timezone, make_aware
 
-TZ = get_default_timezone()
+TZ = timezone.get_default_timezone()
 
 # FIXME contar el numero de gente dentro segun el numero de plazas
 
@@ -79,7 +78,7 @@ def get_day_range(year, month, day):
     else:
         start = datetime.datetime(year, month, day)
         end = start + datetime.timedelta(days=1)
-        return make_aware(start, TZ), make_aware(end, TZ)
+        return timezone.make_aware(start, TZ), timezone.make_aware(end, TZ)
 
 
 # Create your models here.
