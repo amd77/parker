@@ -1,14 +1,18 @@
 # Create your views here.
 from django.utils import timezone
-from django.views.generic import View, TemplateView, ListView, RedirectView, UpdateView
+# from django.views.generic import View, TemplateView, UpdateView
+from django.views.generic import ListView, RedirectView
 from .models import Registro
 from django.core.urlresolvers import reverse
 
+
 class RedirectDia(RedirectView):
     permanent = False
+
     def get_redirect_url(self):
         now = timezone.now()
         return reverse("dia_ymd", args=[now.year, now.month, now.day])
+
 
 class VistaDia(ListView):
     model = Registro
@@ -24,6 +28,7 @@ class VistaDia(ListView):
         context = super(VistaDia, self).get_context_data(**kwargs)
         context.update(Registro.estadisticas_dia(self.year, self.month, self.day))
         return context
+
 
 class VistaMes(ListView):
     model = Registro
