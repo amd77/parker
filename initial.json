@@ -1,0 +1,206 @@
+[
+{
+ "fields": {
+  "nombre": "Vinos y Alcoholes de Canarias",
+  "ultima_factura": 20150001,
+  "cif": "B-38111111",
+  "direccion": "Carretera la cuesta taco, 69"
+ },
+ "model": "empresa.empresa",
+ "pk": 1
+},
+{
+ "fields": {
+  "nombre": "Frigor\u00edficos La Esperanza, S.L.",
+  "ultima_factura": 20150001,
+  "cif": "B-38222222",
+  "direccion": "Carretera la cuesta taco, 67"
+ },
+ "model": "empresa.empresa",
+ "pk": 2
+},
+{
+ "fields": {
+  "empresa": 1,
+  "es_administrador": true,
+  "user": 1,
+  "direccion_ip": ""
+ },
+ "model": "empresa.operario",
+ "pk": 1
+},
+{
+ "fields": {
+  "empresa": 2,
+  "es_administrador": true,
+  "user": 2,
+  "direccion_ip": ""
+ },
+ "model": "empresa.operario",
+ "pk": 2
+},
+{
+ "fields": {
+  "nombre": "Abonado de vinos",
+  "empresa": 1,
+  "codigo": "1111111111111"
+ },
+ "model": "empresa.abonado",
+ "pk": 1
+},
+{
+ "fields": {
+  "nombre": "Abonado de frigorificos",
+  "empresa": 2,
+  "codigo": "2222222222222"
+ },
+ "model": "empresa.abonado",
+ "pk": 2
+},
+{
+ "fields": {
+  "nombre": "Hospital 1",
+  "empresa": 2,
+  "plazas": 100
+ },
+ "model": "inventario.parking",
+ "pk": 1
+},
+{
+ "fields": {
+  "nombre": "Hospital 2",
+  "empresa": 1,
+  "plazas": 50
+ },
+ "model": "inventario.parking",
+ "pk": 2
+},
+{
+ "fields": {
+  "nombre": "Entrada arriba",
+  "mac": "00:11:22:33:44:55",
+  "parking": 1
+ },
+ "model": "inventario.expendedor",
+ "pk": 1
+},
+{
+ "fields": {
+  "nombre": "Entrada abajo",
+  "mac": "00:11:22:33:44:56",
+  "parking": 1
+ },
+ "model": "inventario.expendedor",
+ "pk": 2
+},
+{
+ "fields": {
+  "nombre": "Entrada",
+  "mac": "00:11:22:33:44:57",
+  "parking": 2
+ },
+ "model": "inventario.expendedor",
+ "pk": 3
+},
+{
+ "fields": {
+  "salto_precio": "0.10",
+  "minutos": 5,
+  "precio": "0.00",
+  "salto_minutos": 10,
+  "parking": 1
+ },
+ "model": "inventario.tarifa",
+ "pk": 1
+},
+{
+ "fields": {
+  "salto_precio": "0.10",
+  "minutos": 360,
+  "precio": "4.80",
+  "salto_minutos": 10,
+  "parking": 1
+ },
+ "model": "inventario.tarifa",
+ "pk": 2
+},
+{
+ "fields": {
+  "salto_precio": "0.10",
+  "minutos": 600,
+  "precio": "6.00",
+  "salto_minutos": 60,
+  "parking": 1
+ },
+ "model": "inventario.tarifa",
+ "pk": 3
+},
+{
+ "fields": {
+  "salto_precio": "0.10",
+  "minutos": 5,
+  "precio": "0.00",
+  "salto_minutos": 10,
+  "parking": 2
+ },
+ "model": "inventario.tarifa",
+ "pk": 4
+},
+{
+ "fields": {
+  "salto_precio": "0.10",
+  "minutos": 360,
+  "precio": "4.00",
+  "salto_minutos": 10,
+  "parking": 2
+ },
+ "model": "inventario.tarifa",
+ "pk": 5
+},
+{
+ "fields": {
+  "salto_precio": "0.10",
+  "minutos": 600,
+  "precio": "6.00",
+  "salto_minutos": 60,
+  "parking": 2
+ },
+ "model": "inventario.tarifa",
+ "pk": 6
+},
+{
+ "fields": {
+  "fecha_apertura": null,
+  "codigo": "3333333333333",
+  "fecha_cierre": null,
+  "expendedor": 1,
+  "fecha_solicitud": "2015-08-07T20:48:30Z"
+ },
+ "model": "tickets.entrada",
+ "pk": 1
+},
+{
+ "fields": {
+  "fecha_apertura": null,
+  "codigo": "4444444444444",
+  "fecha_cierre": null,
+  "expendedor": 2,
+  "fecha_solicitud": "2015-08-07T20:48:44Z"
+ },
+ "model": "tickets.entrada",
+ "pk": 2
+},
+{
+ "fields": {
+  "minutos": 1.0,
+  "registro": 2,
+  "operario": 1,
+  "euros": 1.0,
+  "fecha": "2015-08-07T20:48:50Z",
+  "factura": null,
+  "abonado": null
+ },
+ "model": "tickets.salida",
+ "pk": 1
+}
+]

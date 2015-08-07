@@ -33,3 +33,6 @@ class Tarifa(models.Model):
     precio = models.DecimalField(max_digits=5, decimal_places=2)
     salto_minutos = models.IntegerField(default=10)
     salto_precio = models.DecimalField(max_digits=5, decimal_places=2, default='0.1')
+
+    def __unicode__(self):
+        return "{:.3f} eur/min".format(self.precio/self.minutos)

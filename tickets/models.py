@@ -33,4 +33,4 @@ class Salida(models.Model):
     factura = models.ForeignKey(Factura, blank=True, null=True)
 
     def __unicode__(self):
-        return "{} por {}".format(self.fecha, self.operario.username)
+        return "{} ({} minutos) por {}".format(self.fecha, self.minutos, self.operario.user.username)
