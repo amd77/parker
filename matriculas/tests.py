@@ -7,7 +7,7 @@ Replace this with more appropriate tests for your application.
 
 from django.test import TestCase
 
-from registro.models import get_tarifa
+from .models import get_tarifa
 
 class SimpleTest(TestCase):
     def test_basic_addition(self):

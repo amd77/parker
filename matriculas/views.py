@@ -16,7 +16,7 @@ class RedirectDia(RedirectView):
 
 class VistaDia(ListView):
     model = Registro
-    template_name = "registro/dia.html"
+    template_name = "matriculas/dia.html"
 
     def get_queryset(self):
         self.year = int(self.kwargs["year"], 10)
@@ -32,7 +32,7 @@ class VistaDia(ListView):
 
 class VistaMes(ListView):
     model = Registro
-    template_name = "registro/mes.html"
+    template_name = "matriculas/mes.html"
 
     def get_queryset(self):
         self.year = int(self.kwargs["year"], 10)
