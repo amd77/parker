@@ -1,6 +1,42 @@
 [
 {
  "fields": {
+  "username": "admin",
+  "first_name": "",
+  "last_name": "",
+  "is_active": true,
+  "is_superuser": true,
+  "is_staff": true,
+  "last_login": "2015-08-07T21:31:44.732Z",
+  "groups": [],
+  "user_permissions": [],
+  "password": "pbkdf2_sha256$20000$4w0wi26OUEvy$1ReThTAI3hqFxl/90btclbd6/BXze9tKonJGtiZiiU0=",
+  "email": "admin@admin.com",
+  "date_joined": "2015-08-07T21:31:19.930Z"
+ },
+ "model": "auth.user",
+ "pk": 1
+},
+{
+ "fields": {
+  "username": "admin2",
+  "first_name": "",
+  "last_name": "",
+  "is_active": true,
+  "is_superuser": true,
+  "is_staff": true,
+  "last_login": null,
+  "groups": [],
+  "user_permissions": [],
+  "password": "pbkdf2_sha256$20000$6r7EtAs0lrJ0$B259hmwWWPNRQVBCugJSMxxqqfWsoPPHjdCBW8fGR90=",
+  "email": "admin@admin.com",
+  "date_joined": "2015-08-07T21:31:29.858Z"
+ },
+ "model": "auth.user",
+ "pk": 2
+},
+{
+ "fields": {
   "nombre": "Vinos y Alcoholes de Canarias",
   "ultima_factura": 20150001,
   "cif": "B-38111111",
