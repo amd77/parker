@@ -1,0 +1,29 @@
+{% extends "common/base.html" %}
+
+{% block title %}Parking{% endblock title %}
+
+{% block navbar-brand %}
+<a class="navbar-brand" href="{% url 'inicio' %}"><i class="glyphicon glyphicon-link"></i> {{empresa.nombre}}</a>
+{% endblock navbar-brand %}
+
+{% block extra_head %}{% endblock extra_head %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-6">
+        Aqui que vayan algunas estadisticas de {{empresa}}:
+        {% with empresa.parking as parking %}
+            Parking {{parking}}:
+            {% for expendedor in parking.expendedor_set.all %}
+                Expendedor {{expendedor}}
+            {% endfor %}
+            Tarifa: {% for from, to, euros in parking.tabla_tarifa %}
+            {{from}}-{{to}} {{euros}}<br/>
+            {% endfor %}
+        {% endwith %}
+    </div>
+    <div class="col-md-6">
+        Aqui podria ir el formulario de nuevo rollo
+    </div>
+</div>
+{% endblock body %}
