@@ -174,7 +174,7 @@
 {
  "fields": {
   "salto_precio": "0.10",
-  "minutos": 5,
+  "minutos": 0,
   "precio": "0.00",
   "salto_minutos": 10,
   "parking": 2
@@ -185,8 +185,8 @@
 {
  "fields": {
   "salto_precio": "0.10",
-  "minutos": 360,
-  "precio": "4.00",
+  "minutos": 30,
+  "precio": "0.50",
   "salto_minutos": 10,
   "parking": 2
  },
@@ -196,13 +196,35 @@
 {
  "fields": {
   "salto_precio": "0.10",
-  "minutos": 600,
-  "precio": "6.00",
+  "minutos": 360,
+  "precio": "3.60",
   "salto_minutos": 60,
   "parking": 2
  },
  "model": "inventario.tarifa",
  "pk": 6
+},
+{
+ "fields": {
+  "salto_precio": "0.10",
+  "minutos": 600,
+  "precio": "4.80",
+  "salto_minutos": 240,
+  "parking": 2
+ },
+ "model": "inventario.tarifa",
+ "pk": 7
+},
+{
+ "fields": {
+  "salto_precio": "999.00",
+  "minutos": 1441,
+  "precio": "6.00",
+  "salto_minutos": 999,
+  "parking": 2
+ },
+ "model": "inventario.tarifa",
+ "pk": 8
 },
 {
  "fields": {

@@ -17,8 +17,8 @@ def _bressenham(x0, y0, x1, y1):
         err = dx / 2.0
         while x != x1:
             err -= dy
+            yield (x, y)
             if err < 0:
-                yield (x, y)
                 y += sy
                 err += dx
             x += sx
