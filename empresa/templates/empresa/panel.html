@@ -1,29 +1,23 @@
-{% extends "common/base.html" %}
-
-{% block title %}Parking{% endblock title %}
-
-{% block navbar-brand %}
-<a class="navbar-brand" href="{% url 'inicio' %}"><i class="glyphicon glyphicon-link"></i> {{empresa.nombre}}</a>
-{% endblock navbar-brand %}
-
-{% block extra_head %}{% endblock extra_head %}
+{% extends "common/parker.html" %}
 
 {% block body %}
 <div class="row">
     <div class="col-md-6">
-        Aqui que vayan algunas estadisticas de {{empresa}}:
-        {% with empresa.parking as parking %}
-            Parking {{parking}}:
-            {% for expendedor in parking.expendedor_set.all %}
-                Expendedor {{expendedor}}
-            {% endfor %}
-            Tarifa: {% for from, to, euros in parking.tabla_tarifa %}
-            {{from}}-{{to}} {{euros}}<br/>
-            {% endfor %}
-        {% endwith %}
+        <div class="well">
+            Aqui que vayan algunas estadisticas de {{empresa}}:<br>
+            <h2>Parking {{parking.nombre}}:</h2>
+            <ul>
+                {% for expendedor in parking.expendedor_set.all %}
+                <li>Expendedor {{expendedor}}</li>
+                {% endfor %}
+                <li>Direcion ip operario: {{operario.direccion_ip|default:"Ninguna"}}</li>
+            </ul>
+        </div>
     </div>
     <div class="col-md-6">
-        Aqui podria ir el formulario de nuevo rollo
+        <div class="well">
+            Aqui podria ir el formulario para leer un codigo de barras y decir cuanto cuesta
+        </div>
     </div>
 </div>
 {% endblock body %}

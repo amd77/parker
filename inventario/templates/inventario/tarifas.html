@@ -1,0 +1,27 @@
+{% extends "common/parker.html" %}
+{% load multicol adminurl %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h1>Tarifas {{parking.nombre}} {% admin parking %}</h1>
+    </div>
+</div>
+<div class="row">
+    {% multicol parking.tabla_tarifa 4 as cols %}
+    {% for col in cols %}
+        <div class="col-md-3 col-sm-6">
+            <table class="table">
+                <thead>
+                    <tr><th>Desde</th><th>Hasta</th><th>Precio</th></tr>
+                </thead>
+                <tbody>
+                {% for from, to, euros in col %}
+                    <tr><td>{{from}}</td><td>{{to}}</td><td>{{euros}} €</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+</div>
+{% endblock body %}

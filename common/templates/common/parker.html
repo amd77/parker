@@ -1,0 +1,9 @@
+{% extends "common/base.html" %}
+
+{% block title %}Parking{% endblock title %}
+
+{% block navbar-brand %}
+<a class="navbar-brand" href="{% url 'inicio' %}"><i class="glyphicon glyphicon-link"></i> {{empresa.nombre}}</a>
+{% endblock navbar-brand %}
+
+{% block extra_head %}{% endblock extra_head %}
