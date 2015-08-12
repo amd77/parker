@@ -1,0 +1,48 @@
+{% comment %}
+{% if user.is_authenticated %}
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-euro"></i> Contabilidad <span class="caret"></span></button>
+    <ul role="menu" class="dropdown-menu">
+        <li><a href="{% url 'mensualidad_resumen' %}"> General </a></li>
+        <li><a href="{% url 'mensualidad_resumen' user.username %}"> Ver Cuotas ({{ user.username }}) </a></li>
+    </ul>
+</div>
+{% if espacio.encuesta_set.count %}
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-stats"></i> Encuestas <span class="caret"></span></button>
+    <ul role="menu" class="dropdown-menu">
+        {% for encuesta in espacio.encuesta_set.all %}
+        <li><a href="{% url 'encuesta_view' encuesta.pk %}">{{forloop.counter}}: {{encuesta.pregunta}}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+{% if user.is_superuser %}
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-wrench"></i> Administrator <span class="caret"></span></button>
+    <ul role="menu" class="dropdown-menu">
+        <li><a href="{% url 'admin:index' %}" target="_blank">Django admin</a></li>
+    </ul>
+</div>
+{% endif %}
+
+<div class="btn-group">
+    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> Mi cuenta ({{ user.username }}) <span class="caret"></span></button>
+    <ul role="menu" class="dropdown-menu">
+        <li><a href="{% url 'detail_user' user.username %}">Ver perfil</a></li>
+        <li><a href="#">Editar datos de usuario</a></li>
+        <li><a href="#">Editar datos personales</a></li>
+        <li><a href="{% url 'password_change' %}">Cambiar contraseña</a></li>
+        <li class="divider"></li>
+        <li><a href="{% url 'logout' %}">Salir</a></li>
+    </ul>
+</div>
+
+
+{% else %}
+<a type="button" class="btn btn-success" href="{% url 'create_user' %}">Inscríbete aquí</a>
+<a type="button" class="btn btn-info" href="{% url 'login' %}" >Acceso Miembros</a>
+{% endif %}
+
+{% endcomment %}

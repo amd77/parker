@@ -1,0 +1,10 @@
+<li class="dropdown">
+    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-user"></i> {{user}}<span class="caret"></span></a>
+    <ul role="menu" class="dropdown-menu">
+        {% if user.is_superuser %}
+        <li><a href="{% url 'admin:index' %}"><i class="glyphicon glyphicon-wrench"></i> Interfaz administrativa</a></li>
+        <li role="separator" class="divider"></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}"><i class="glyphicon glyphicon-off"></i> Cerrar sesión</a></li>
+    </ul>
+</li>
