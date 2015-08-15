@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from empresa.models import Operario, Abonado, Factura
-from inventario.models import Expendedor
+from inventario.models import Expendedor, _hhmm
 # import datetime
 
 TZ = timezone.get_default_timezone()
@@ -19,6 +19,11 @@ class Entrada(models.Model):
     fecha_apertura = models.DateTimeField(blank=True, null=True)
     fecha_cierre = models.DateTimeField(blank=True, null=True)
 
+    @property
+    def fecha(self):
+        return self.fecha_cierre or self.fecha_apertura or \
+            self.fecha_solicitud or self.fecha_post
+
     def __unicode__(self):
         return "{} ({})".format(self.codigo, self.expendedor)
 
@@ -28,10 +33,38 @@ class Salida(models.Model):
     entrada = models.OneToOneField(Entrada)
     fecha = models.DateTimeField()
     minutos = models.FloatField()
-    euros = models.FloatField()
+    euros = models.FloatField(blank=True, null=True)
     operario = models.ForeignKey(Operario)
     abonado = models.ForeignKey(Abonado, blank=True, null=True)
     factura = models.ForeignKey(Factura, blank=True, null=True)
 
     def __unicode__(self):
         return "{} ({} minutos) por {}".format(self.fecha, self.minutos, self.operario.user.username)
+
+    def minutos_str(self):
+        return _hhmm(self.minutos)
+
+    def fecha_salida_str(self):
+        if self.fecha.date() == self.entrada.fecha.date():
+            return self.fecha.time()
+        else:
+            return self.fecha
+
+    def fecha_entrada_str(self):
+        if self.fecha.date() == self.entrada.fecha.date():
+            return self.entrada.fecha.time()
+        else:
+            return self.entrada.fecha
+
+    @staticmethod
+    def crea_por_entrada(entrada, operario):
+        try:
+            return False, entrada.salida
+        except AttributeError:
+            pass
+        fecha = timezone.now()
+        minutos = (fecha - entrada.fecha).total_seconds() / 60.0
+        euros = entrada.expendedor.parking.get_tarifa(minutos)
+        return True, Salida.objects.create(entrada=entrada, fecha=fecha,
+                                           minutos=minutos, euros=euros,
+                                           operario=operario)

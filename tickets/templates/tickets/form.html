@@ -1,0 +1,106 @@
+{% extends "common/parker.html" %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+<style>
+.superbig { font-size: 250%; }
+.big { font-size: 200%; }
+.big input { width: 5em; }
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="well">
+            Aqui que vayan algunas estadisticas de {{empresa}}:<br>
+            <h2>Parking {{parking.nombre}}:</h2>
+            <ul>
+                {% for expendedor in parking.expendedor_set.all %}
+                <li>Expendedor {{expendedor}}</li>
+                {% endfor %}
+                <li>Direcion ip operario: {{operario.direccion_ip|default:"Ninguna"}}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            {% if entrada and salida %}
+                <div class="col-md-12">
+                    {% if not creado %}
+                        <h2 class="text-center"><span class="label label-danger">Ticket repetido!</span></h2>
+                    {% endif %}
+                    <dl class="dl-horizontal superbig">
+                        <dt>Precio</dt>
+                        <dd>{{salida.euros|floatformat:2|default:"ERROR"}} €</dd>
+                    </dl>
+                    <dl class="dl-horizontal big">
+                        {% if salida.euros and creado %}
+                            <dt>Entregado</dt>
+                            <dd><input type='text' id="entregado" /> €</dd>
+                            <dt>Cambio</dt>
+                            <dd><span id="resultado">-</span></dd>
+                        {% endif %}
+                    </dl>
+                    <dl class="dl-horizontal">
+                        <dt>Codigo</dt>
+                        <dd>{{entrada.codigo}}</dd>
+                        <dt>Entrada</dt>
+                        <dd>{{salida.fecha_entrada_str}}</dd>
+                        <dt>Salida</dt>
+                        <dd>{{salida.fecha_salida_str}}</dd>
+                        <dt>Resta</dt>
+                        <dd>{{salida.minutos_str}}</dd>
+                    </dl>
+            {% elif error %}
+                <div class="col-md-12">
+                    <h1>Error</h1>
+                    <p>{{error}}</p>
+                </div>
+            {% endif %}
+            {% if form %}
+                <div class="col-md-12">
+                    <form class="form" method="POST" action="">
+                        {{ form|crispy }}
+                        {% csrf_token %}
+                        <button class="btn btn-primary" type="submit">Validar codigo</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="col-md-12">
+                    <div class="btn-group btn-group-lg btn-group-justified" role="group">
+                        <a role="button" class="btn btn-success" href="{% url 'inicio' %}?abre=si">Abrir barrera</a>
+                        <a role="button" class="btn btn-danger" href="{% url 'inicio' %}">No abrir barrera</a>
+                    </div<>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block extra_foot %}
+    <script type="text/javascript">
+    $(function() {
+        // form initial focus (tanto form calculadora como codigo)
+        var inp = $('input:text:visible:first');
+        inp.focus().select();
+        // form force focus (tanto form calculadora como codigo)
+        inp.focusout(function() {
+            inp.focus();
+        });
+        // widget calculadora
+        var el = $("#entregado");
+        el.val("");
+        el.bind('keyup', function() {
+            var euros = parseFloat('{{salida.euros}}'.replace(',','.'));
+            var contado = parseFloat(el.val()) - euros;
+            if (contado > 0) {
+                $("#resultado").html(contado.toFixed(2).replace('.', ',') + " €");
+            } else {
+                $("#resultado").html("-");
+            }
+        });
+    });
+    </script>
+{% endblock extra_foot %}

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import View
+from django.views.generic import View, FormView
 from django.http import HttpResponse, HttpResponseBadRequest
-from .models import Entrada
+from django.core.urlresolvers import reverse_lazy
+from empresa.views import OperarioMixin
+from .models import Entrada, Salida
+from .forms import TicketForm
 from inventario.models import Expendedor
 
 
@@ -16,3 +19,17 @@ class Create(View):
             return HttpResponse("ok: {}".format(obj.pk))
         except Exception as e:
             return HttpResponseBadRequest("ko: {}".format(e))
+
+
+class TicketFormView(OperarioMixin, FormView):
+    template_name = "tickets/form.html"
+    form_class = TicketForm
+    success_url = reverse_lazy('ticket_form')
+
+    def form_valid(self, form):
+        context = {}
+        creado, salida = Salida.crea_por_entrada(form.entrada, self.operario)
+        context['entrada'] = form.entrada
+        context['salida'] = salida
+        context['creado'] = creado
+        return self.render_to_response(self.get_context_data(**context))

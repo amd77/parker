@@ -36,7 +36,12 @@ def _bressenham(x0, y0, x1, y1):
 def _hhmm(minutos):
     "Conversion de minutos a HH:MM"
     minutos = int(minutos)
-    return "{:02d}:{:02d}".format(minutos / 60, minutos % 60)
+    horas, minutos = minutos / 60, minutos % 60
+    dias, horas = horas / 24, horas % 24
+    if dias:
+        return "{} días {:02d}:{:02d}".format(dias, horas, minutos)
+    else:
+        return "{:02d}:{:02d}".format(horas, minutos)
 
 
 class Parking(models.Model):
