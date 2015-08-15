@@ -25,7 +25,7 @@ class Entrada(models.Model):
 
 class Salida(models.Model):
     "Recogida de un ticket en salida, con sus datos de cobro y factura si pide"
-    registro = models.OneToOneField(Entrada)
+    entrada = models.OneToOneField(Entrada)
     fecha = models.DateTimeField()
     minutos = models.FloatField()
     euros = models.FloatField()
