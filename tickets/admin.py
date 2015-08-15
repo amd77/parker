@@ -9,6 +9,7 @@ class SalidaInline(admin.TabularInline):
 class EntradaAdmin(admin.ModelAdmin):
     list_display = ('codigo', 'expendedor', 'fecha_solicitud', 'salida')
     list_filter = ('expendedor', )
+    readonly_fields = ('fecha_post', )
     inlines = (SalidaInline, )
 
 admin.site.register(Entrada, EntradaAdmin)

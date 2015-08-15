@@ -14,6 +14,7 @@ class Entrada(models.Model):
     "Esto es la emision de un ticket en una expendedora"
     codigo = models.CharField(max_length=13, help_text="Barcode EAN-13", unique=True)
     expendedor = models.ForeignKey(Expendedor)
+    fecha_post = models.DateTimeField(auto_now_add=True)
     fecha_solicitud = models.DateTimeField()
     fecha_apertura = models.DateTimeField(blank=True, null=True)
     fecha_cierre = models.DateTimeField(blank=True, null=True)
