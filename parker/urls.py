@@ -14,6 +14,7 @@ urlpatterns = [
     # Uncomment the next line to enable the admin:
     url(r'^parker/', include('empresa.urls')),
     url(r'^parker/', include('inventario.urls')),
+    url(r'^parker/', include('tickets.urls')),
     url(r'^parker/admin/', include(admin.site.urls)),
     url(r'^parker/matriculas/', include('matriculas.urls')),
 ]
