@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'crispy_forms',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'common',
@@ -173,6 +174,7 @@ import socket
 EMAIL_SUBJECT_PREFIX = "parker@" + socket.gethostname() + ": "
 SERVER_EMAIL = "parker@" + socket.getfqdn(socket.gethostname())
 
+CRISPY_TEMPLATE_PACK = "bootstrap3"
 
 try:
     from parker.settings_local import *
