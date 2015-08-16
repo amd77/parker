@@ -175,6 +175,8 @@ EMAIL_SUBJECT_PREFIX = "parker@" + socket.gethostname() + ": "
 SERVER_EMAIL = "parker@" + socket.getfqdn(socket.gethostname())
 
 CRISPY_TEMPLATE_PACK = "bootstrap3"
+AMQP_CONFIG = {'AMQP_URI': 'amqp://guest:guest@localhost'}
+
 
 try:
     from parker.settings_local import *

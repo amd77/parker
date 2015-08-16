@@ -9,13 +9,32 @@ from .forms import TicketForm
 from inventario.models import Expendedor
 
 
-class Create(View):
+class CreatePost(View):
     def post(self, request, *args, **kwargs):
-        keys = 'codigo fecha_solicitud fecha_apertura fecha_cierre'.split()
-        data = {key: request.POST.get(key) for key in keys}
+        mac = request.POST.get('mac')
+        codigo = request.POST.get('codigo')
+        fecha_solicitud = request.POST.get('fecha_solicitud')
         try:
-            exp = Expendedor.objects.get(mac=request.POST.get('mac'))
-            obj = Entrada.objects.create(expendedor=exp, **data)
+            exp = Expendedor.objects.get(mac=mac)
+            obj = Entrada.objects.create(expendedor=exp, codigo=codigo,
+                                         fecha_solicitud=fecha_solicitud)
+            return HttpResponse("ok: {}".format(obj.pk))
+        except Exception as e:
+            return HttpResponseBadRequest("ko: {}".format(e))
+
+
+class UpdatePost(View):
+    def post(self, request, *args, **kwargs):
+        codigo = request.POST.get('codigo')
+        fecha_apertura = request.POST.get('fecha_apertura')
+        fecha_cierre = request.POST.get('fecha_cierre')
+        try:
+            obj = Entrada.objects.get(codigo=codigo)
+            if fecha_apertura:
+                obj.fecha_apertura = fecha_apertura
+            if fecha_cierre:
+                obj.fecha_cierre = fecha_cierre
+            obj.save()
             return HttpResponse("ok: {}".format(obj.pk))
         except Exception as e:
             return HttpResponseBadRequest("ko: {}".format(e))

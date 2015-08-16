@@ -6,5 +6,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     url(r'^$', csrf_exempt(v.TicketFormView.as_view()), name="inicio"),
-    url(r'^api/create$', csrf_exempt(v.Create.as_view()), name="ticket_create"),
+    url(r'^api/create$', csrf_exempt(v.CreatePost.as_view()), name="ticket_create"),
+    url(r'^api/update$', csrf_exempt(v.UpdatePost.as_view()), name="ticket_update"),
 ]
