@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.views.generic import View, FormView
+from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthArchiveView, YearArchiveView
+
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse_lazy
 from empresa.views import OperarioMixin
@@ -52,3 +54,51 @@ class TicketFormView(OperarioMixin, FormView):
         context['salida'] = salida
         context['creado'] = creado
         return self.render_to_response(self.get_context_data(**context))
+
+
+class EntradaArchiveMixin(object):
+    month_format = "%m"
+    model = Entrada
+    date_field = "fecha_post"
+
+    def get_queryset(self):
+        qs = super(EntradaArchiveMixin, self).get_queryset()
+        qs = qs.filter(expendedor__parking=self.parking)
+        qs = qs.filter(salida__isnull=True)
+        return qs.order_by('fecha_post')
+
+
+class SalidaArchiveMixin(object):
+    month_format = "%m"
+    model = Entrada
+    date_field = "fecha_post"
+
+    def get_queryset(self):
+        qs = super(SalidaArchiveMixin, self).get_queryset()
+        qs = qs.filter(expendedor__parking=self.parking)
+        qs = qs.filter(salida__isnull=False)
+        return qs.order_by('salida__fecha')
+
+
+class EntradaTodayList(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
+    pass
+
+
+class EntradaDayList(OperarioMixin, EntradaArchiveMixin, DayArchiveView):
+    pass
+
+
+class SalidaTodayList(OperarioMixin, SalidaArchiveMixin, TodayArchiveView):
+    pass
+
+
+class SalidaDayList(OperarioMixin, SalidaArchiveMixin, DayArchiveView):
+    pass
+
+
+class SalidaMonthList(OperarioMixin, SalidaArchiveMixin, MonthArchiveView):
+    pass
+
+
+class SalidaYearList(OperarioMixin, SalidaArchiveMixin, YearArchiveView):
+    pass

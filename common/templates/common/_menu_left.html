@@ -1,15 +1,14 @@
-{% comment %}
-<li class="dropdown">
-<a data-toggle="dropdown" class="dropdown-toggle navbar-brand" title="Otros espacios" href="#"><span class="glyphicon glyphicon-globe"></span></a>
-<ul role="menu" class="dropdown-menu">
-    <li role="presentation" class="dropdown-header"><a href="#">Otros espacios</a></li>
-    {% otros_espacios %}
-</ul>
-</li>
-{% endcomment %}
 {% if user.is_authenticated %}
 <li><a href="{% url 'tarifas' %}">Tarifas</a></li>
 {% endif %}
 {% if operario.es_administrador %}
-<li><a href="{% url 'tarifas' %}">cosadeadmin</a></li>
+<li class="dropdown">
+    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas</a>
+    <ul role="menu" class="dropdown-menu">
+        <li><a href="{% url 'dentro_today' %}">Dentro hoy</a></li>
+        <li><a href="{% url 'fuera_today' %}">Fuera hoy</a></li>
+        <li><a href="{% url 'fuera_month' now.year now.month %}"><i class="glyphicon glyphicon-remove"></i> Este mes</a></li>
+        <li><a href="{% url 'fuera_year' now.year %}"><i class="glyphicon glyphicon-remove"></i> Este año</a></li>
+    </ul>
+</li>
 {% endif %}

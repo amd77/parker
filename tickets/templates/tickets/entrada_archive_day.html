@@ -1,0 +1,31 @@
+{% extends "common/parker.html" %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+<style>
+.superbig { font-size: 250%; }
+.big { font-size: 200%; }
+.big input { width: 5em; }
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Hora entrada</th>
+            <th>Expendedor</th>
+            <th>Codigo</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+        <tr>
+            <td>{{object.fecha|date:"h:m"}}</td>
+            <td>{{object.expendedor}}</td>
+            <td>{{object.codigo}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}

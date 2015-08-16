@@ -3,6 +3,7 @@
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 
 
 class OperarioMixin(object):
@@ -11,6 +12,7 @@ class OperarioMixin(object):
         context['operario'] = self.operario
         context['empresa'] = self.empresa
         context['parking'] = self.parking
+        context['now'] = timezone.now()
         return context
 
     @method_decorator(login_required)
