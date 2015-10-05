@@ -232,7 +232,8 @@
   "codigo": "3333333333333",
   "fecha_cierre": null,
   "expendedor": 1,
-  "fecha_solicitud": "2015-08-07T20:48:30Z"
+  "fecha_solicitud": "2015-08-07T20:48:30Z",
+  "fecha_post": "2015-08-07T20:48:30Z"
  },
  "model": "tickets.entrada",
  "pk": 1
@@ -243,7 +244,8 @@
   "codigo": "4444444444444",
   "fecha_cierre": null,
   "expendedor": 2,
-  "fecha_solicitud": "2015-08-07T20:48:44Z"
+  "fecha_solicitud": "2015-08-07T20:48:44Z",
+  "fecha_post": "2015-08-07T20:48:44Z"
  },
  "model": "tickets.entrada",
  "pk": 2
@@ -251,7 +253,7 @@
 {
  "fields": {
   "minutos": 1.0,
-  "registro": 2,
+  "entrada_id": 2,
   "operario": 1,
   "euros": 1.0,
   "fecha": "2015-08-07T20:48:50Z",
