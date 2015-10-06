@@ -17,7 +17,7 @@ class CreatePost(View):
         mac = request.POST.get('mac')
         codigo = request.POST.get('codigo')
         fecha_solicitud = float(request.POST.get('fecha_solicitud'))
-        fecha_solicitud = datetime.datetime.from_timestamp(fecha_solicitud)
+        fecha_solicitud = datetime.datetime.fromtimestamp(fecha_solicitud)
         try:
             exp = Expendedor.objects.get(mac=mac)
             obj = Entrada.objects.create(expendedor=exp, codigo=codigo,
