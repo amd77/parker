@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 from django.views.generic import View, FormView
 from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthArchiveView, YearArchiveView
 
@@ -15,7 +16,8 @@ class CreatePost(View):
     def post(self, request, *args, **kwargs):
         mac = request.POST.get('mac')
         codigo = request.POST.get('codigo')
-        fecha_solicitud = request.POST.get('fecha_solicitud')
+        fecha_solicitud = float(request.POST.get('fecha_solicitud'))
+        fecha_solicitud = datetime.datetime.from_timestamp(fecha_solicitud)
         try:
             exp = Expendedor.objects.get(mac=mac)
             obj = Entrada.objects.create(expendedor=exp, codigo=codigo,
