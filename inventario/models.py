@@ -116,3 +116,6 @@ class Tarifa(models.Model):
 
     def __unicode__(self):
         return "{} = {:.2f} €".format(_hhmm(self.minutos), self.precio)
+
+    class Meta:
+        ordering = ('minutos', )
