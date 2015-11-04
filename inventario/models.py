@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 from django.db import models
+from django.apps import apps
 from empresa.models import Empresa
 
 
@@ -78,6 +79,19 @@ class Parking(models.Model):
         for min0, min1, precio in self.tupla_tarifa():
             if min0 <= minutos <= min1:
                 return precio
+
+    @property
+    def entrada_set(self):
+        Entrada = apps.get_model('tickets.Entrada')
+        return Entrada.objects.por_parking(self)
+
+    @property
+    def coches_hoy(self):
+        return self.entrada_set.de_hoy().count()
+
+    @property
+    def coches_dentro(self):
+        return self.entrada_set.de_hoy().dentro().count()
 
 
 class Expendedor(models.Model):

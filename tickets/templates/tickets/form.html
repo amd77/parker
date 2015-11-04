@@ -13,14 +13,7 @@
 <div class="row">
     <div class="col-md-6">
         <div class="well">
-            Aqui que vayan algunas estadisticas de {{empresa}}:<br>
-            <h2>Parking {{parking.nombre}}:</h2>
-            <ul>
-                {% for expendedor in parking.expendedor_set.all %}
-                <li>Expendedor {{expendedor}}</li>
-                {% endfor %}
-                <li>Direcion ip operario: {{operario.direccion_ip|default:"Ninguna"}}</li>
-            </ul>
+            {% include "empresa/_resumen.html" %}
         </div>
     </div>
     <div class="col-md-6">

@@ -10,6 +10,20 @@ from inventario.models import Expendedor, _hhmm
 TZ = timezone.get_default_timezone()
 
 
+class EntradaQuerySet(models.QuerySet):
+    def de_hoy(self):
+        now = timezone.now()
+        inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        fin = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+        return self.filter(fecha_post__gt=inicio, fecha_post__lt=fin)
+
+    def por_parking(self, parking):
+        return self.filter(expendedor__parking=parking)
+
+    def dentro(self):
+        return self.exclude(fecha_apertura__isnull=False).exclude(fecha_cierre__isnull=False)
+
+
 class Entrada(models.Model):
     "Esto es la emision de un ticket en una expendedora"
     codigo = models.CharField(max_length=13, help_text="Barcode EAN-13", unique=True)
@@ -18,6 +32,8 @@ class Entrada(models.Model):
     fecha_solicitud = models.DateTimeField()
     fecha_apertura = models.DateTimeField(blank=True, null=True)
     fecha_cierre = models.DateTimeField(blank=True, null=True)
+
+    objects = EntradaQuerySet.as_manager()
 
     @property
     def fecha(self):
