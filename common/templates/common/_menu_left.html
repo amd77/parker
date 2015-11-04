@@ -3,7 +3,7 @@
 {% endif %}
 {% if operario.es_administrador %}
 <li class="dropdown">
-    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas</a>
+    <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas<span class="caret"></a>
     <ul role="menu" class="dropdown-menu">
         <li><a href="{% url 'dentro_today' %}">Dentro hoy</a></li>
         <li><a href="{% url 'fuera_today' %}">Fuera hoy</a></li>
