@@ -3,21 +3,47 @@
 
 {% block body %}
 <div class="row">
-    <div class="col-md-12">
-        <h2>Cierre de caja para {{user}}</h2>
+    <div class="col-md-12 text-center">
+        <h2>Cierre de caja {{euros|floatformat:2}} para {{user}}</h2>
     </div>
 
-    <div class="col-md-4">
-        <h3>Caja total: {{euros|floatformat:2}}</h3>
-        <ul>
-            <li>Numero de tickets: {{numero_tickets}}</li>
-            {% if numero_tickets %}
-            <li>Primer ticket: {{primer_ticket.fecha|date:"H:i:s"}}</li>
-            <li>Ultimo ticket: {{ultimo_ticket.fecha|date:"H:i:s"}}</li>
-            {% endif %}
-        </ul>
+    <div class="col-md-6">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Num</th>
+                    <th>Hora entrada</th>
+                    <th>Hora salida</th>
+                    <th>Tiempo</th>
+                    <th>Minutos</th>
+                    <th>€</th>
+                    <!--
+                    <th>Cambio</th>
+                    <th>Devolución</th>
+                    -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for object in object_list %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{object.entrada.fecha_post|date:'H:i:s'}}</td>
+                    <td>{{object.fecha|date:'H:i:s'}}</td>
+                    <td>{{object.minutos_str}}</td>
+                    <td>{{object.minutos|floatformat:0}}</td>
+                    <td>{{object.euros|floatformat:2}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan=5>Total recaudado</th>
+                    <th>{{euros|floatformat:2}}</th>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-6">
         <div class="row">
             {% if not euros %}
                 <p>La caja está cerrada.</p>

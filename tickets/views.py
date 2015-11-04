@@ -63,6 +63,7 @@ class CierreView(OperarioMixin, FormView):
     def get_context_data(self, **kwargs):
         context = super(CierreView, self).get_context_data(**kwargs)
         qs = self.get_queryset()
+        context['object_list'] = qs
         context['primer_ticket'] = qs.first()
         context['ultimo_ticket'] = qs.last()
         context['numero_tickets'] = qs.count()
