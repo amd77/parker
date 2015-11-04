@@ -3,6 +3,7 @@
 import datetime
 from django.views.generic import View, FormView
 from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthArchiveView, YearArchiveView
+from django.utils import timezone
 
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse_lazy
@@ -48,16 +49,33 @@ class UpdatePost(View):
 class CierreView(OperarioMixin, FormView):
     template_name = "tickets/cierre.html"
     form_class = CierreForm
-    success_url = reverse_lazy('logout')
+    # success_url = reverse_lazy('logout')
+    success_url = reverse_lazy('ticket_cierre')
+
+    def get_queryset(self):
+        return self.operario.salida_set.de_hoy().sin_cerrar()
+
+    def get_initial(self):
+        qs = self.get_queryset()
+        euros = qs.aggregate(out=Sum('euros'))['out'] or 0.0
+        return {'euros': euros}
 
     def get_context_data(self, **kwargs):
         context = super(CierreView, self).get_context_data(**kwargs)
-        qs = self.operario.salida_set.de_hoy()
+        qs = self.get_queryset()
         context['primer_ticket'] = qs.first()
         context['ultimo_ticket'] = qs.last()
         context['numero_tickets'] = qs.count()
         context['euros'] = qs.aggregate(out=Sum('euros'))['out'] or 0.0
         return context
+
+    def form_valid(self, form):
+        redirect = super(CierreView, self).form_valid(form)
+        qs = self.get_queryset()
+        euros = qs.aggregate(out=Sum('euros'))['out'] or 0.0
+        if euros == form.cleaned_data['euros']:
+            qs.update(fecha_cierre=timezone.now())
+        return redirect
 
 
 class TicketFormView(OperarioMixin, FormView):

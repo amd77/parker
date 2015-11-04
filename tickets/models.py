@@ -60,6 +60,9 @@ class SalidaQuerySet(models.QuerySet):
     def por_operario(self, operario):
         return self.filter(operario=operario)
 
+    def sin_cerrar(self):
+        return self.filter(fecha_cierre__isnull=True)
+
 
 class Salida(models.Model):
     "Recogida de un ticket en salida, con sus datos de cobro y factura si pide"
@@ -70,6 +73,7 @@ class Salida(models.Model):
     operario = models.ForeignKey(Operario)
     abonado = models.ForeignKey(Abonado, blank=True, null=True)
     factura = models.ForeignKey(Factura, blank=True, null=True)
+    fecha_cierre = models.DateTimeField(blank=True, null=True)
 
     objects = SalidaQuerySet.as_manager()
 

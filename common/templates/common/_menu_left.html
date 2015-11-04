@@ -1,5 +1,6 @@
 {% if user.is_authenticated %}
 <li><a href="{% url 'tarifas' %}">Tarifas</a></li>
+<li><a href="{% url 'ticket_cierre' %}">Cierre de caja</a></li>
 {% endif %}
 {% if operario.es_administrador %}
 <li class="dropdown">
