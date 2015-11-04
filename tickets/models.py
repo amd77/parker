@@ -20,6 +20,9 @@ class EntradaQuerySet(models.QuerySet):
     def por_parking(self, parking):
         return self.filter(expendedor__parking=parking)
 
+    def por_operario(self, operario):
+        return self.filter(operario=operario)
+
     def dentro(self):
         return self.exclude(fecha_apertura__isnull=False).exclude(fecha_cierre__isnull=False)
 
@@ -44,6 +47,20 @@ class Entrada(models.Model):
         return "{} ({})".format(self.codigo, self.expendedor)
 
 
+class SalidaQuerySet(models.QuerySet):
+    def de_hoy(self):
+        now = timezone.now()
+        inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        fin = now.replace(hour=23, minute=59, second=59, microsecond=999999)
+        return self.filter(fecha__gt=inicio, fecha__lt=fin)
+
+    def por_parking(self, parking):
+        return self.filter(expendedor__parking=parking)
+
+    def por_operario(self, operario):
+        return self.filter(operario=operario)
+
+
 class Salida(models.Model):
     "Recogida de un ticket en salida, con sus datos de cobro y factura si pide"
     entrada = models.OneToOneField(Entrada)
@@ -53,6 +70,8 @@ class Salida(models.Model):
     operario = models.ForeignKey(Operario)
     abonado = models.ForeignKey(Abonado, blank=True, null=True)
     factura = models.ForeignKey(Factura, blank=True, null=True)
+
+    objects = SalidaQuerySet.as_manager()
 
     def __unicode__(self):
         return "{} ({} minutos) por {}".format(self.fecha, self.minutos, self.operario.user.username)

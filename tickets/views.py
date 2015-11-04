@@ -7,8 +7,9 @@ from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthAr
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse_lazy
 from empresa.views import OperarioMixin
+from django.db.models import Sum
 from .models import Entrada, Salida
-from .forms import TicketForm
+from .forms import TicketForm, CierreForm
 from inventario.models import Expendedor
 
 
@@ -42,6 +43,21 @@ class UpdatePost(View):
             return HttpResponse("ok: {}".format(obj.pk))
         except Exception as e:
             return HttpResponseBadRequest("ko: {}".format(e))
+
+
+class CierreView(OperarioMixin, FormView):
+    template_name = "tickets/cierre.html"
+    form_class = CierreForm
+    success_url = reverse_lazy('logout')
+
+    def get_context_data(self, **kwargs):
+        context = super(CierreView, self).get_context_data(**kwargs)
+        qs = self.operario.salida_set.de_hoy()
+        context['primer_ticket'] = qs.first()
+        context['ultimo_ticket'] = qs.last()
+        context['numero_tickets'] = qs.count()
+        context['euros'] = qs.aggregate(out=Sum('euros'))['out'] or 0.0
+        return context
 
 
 class TicketFormView(OperarioMixin, FormView):

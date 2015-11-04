@@ -15,3 +15,7 @@ class TicketForm(forms.Form):
         except Entrada.DoesNotExist:
             raise forms.ValidationError("Código no se encuentra")
         return codigo
+
+
+class CierreForm(forms.Form):
+    confirmacion = forms.BooleanField()
