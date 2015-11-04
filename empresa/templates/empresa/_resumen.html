@@ -1,11 +1,10 @@
-            Aqui que vayan algunas estadisticas de {{empresa}}:<br>
             <h2>Parking {{parking.nombre}}:</h2>
             <ul>
                 <li><span class="badge">{{parking.coches_dentro}} coches dentro</span></li>
                 {% for expendedor in parking.expendedor_set.all %}
-                <li>Expendedor {{expendedor}}</li>
+                <li>Expendedor {{forloop.counter}}: {{expendedor.nombre}}</li>
                 {% endfor %}
                 <li>{{parking.coches_hoy|default:0}} coches gestionados hoy</li>
-                <li>Direcion ip operario: {{operario.direccion_ip|default:"Ninguna"}}</li>
+                <li>Operario actual: {{operario.user}}</li>
             </ul>
 
