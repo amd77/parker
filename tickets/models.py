@@ -24,7 +24,7 @@ class EntradaQuerySet(models.QuerySet):
         return self.filter(operario=operario)
 
     def dentro(self):
-        return self.exclude(fecha_apertura__isnull=False).exclude(fecha_cierre__isnull=False)
+        return self.filter(salida__isnull=True)
 
 
 class Entrada(models.Model):
