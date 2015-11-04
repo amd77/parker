@@ -1,0 +1,58 @@
+{% extends "common/parker.html" %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Cierre de caja para {{user}}</h2>
+    </div>
+
+    <div class="col-md-6">
+        <h3>Caja total: {{euros}}</h3>
+        <ul>
+            <li>Primer ticket: {{primer_ticket.fecha|date:"H:i:s"}}</li>
+            <li>Ultimo ticket: {{ultimo_ticket.fecha|date:"H:i:s"}}</li>
+            <li>Numero de tickets: {{numero_tickets}}</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <div class="row">
+            {% if form %}
+                <div class="col-md-12">
+                    <form class="form" method="POST" action="">
+                        {{ form|crispy }}
+                        {% csrf_token %}
+                        <button class="btn btn-primary" type="submit">Cerrar caja y salir de la sesión</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock body %}
+
+{% block extra_foot %}
+    <script type="text/javascript">
+    $(function() {
+        // form initial focus (tanto form calculadora como codigo)
+        var inp = $('input:text:visible:first');
+        inp.focus().select();
+        // form force focus (tanto form calculadora como codigo)
+        inp.focusout(function() {
+            inp.focus();
+        });
+        // widget calculadora
+        var el = $("#entregado");
+        el.val("");
+        el.bind('keyup', function() {
+            var euros = parseFloat('{{salida.euros}}'.replace(',','.'));
+            var contado = parseFloat(el.val()) - euros;
+            if (contado > 0) {
+                $("#resultado").html(contado.toFixed(2).replace('.', ',') + " €");
+            } else {
+                $("#resultado").html("-");
+            }
+        });
+    });
+    </script>
+{% endblock extra_foot %}
