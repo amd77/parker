@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='salida',
-            name='fecha_cierre',
+            name='fecha_caja',
             field=models.DateTimeField(null=True, blank=True),
         ),
     ]

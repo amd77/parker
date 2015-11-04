@@ -61,7 +61,7 @@ class SalidaQuerySet(models.QuerySet):
         return self.filter(operario=operario)
 
     def sin_cerrar(self):
-        return self.filter(fecha_cierre__isnull=True)
+        return self.filter(fecha_caja__isnull=True)
 
 
 class Salida(models.Model):
@@ -73,7 +73,7 @@ class Salida(models.Model):
     operario = models.ForeignKey(Operario)
     abonado = models.ForeignKey(Abonado, blank=True, null=True)
     factura = models.ForeignKey(Factura, blank=True, null=True)
-    fecha_cierre = models.DateTimeField(blank=True, null=True)
+    fecha_caja = models.DateTimeField(blank=True, null=True)
 
     objects = SalidaQuerySet.as_manager()
 

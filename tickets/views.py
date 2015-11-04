@@ -74,7 +74,7 @@ class CierreView(OperarioMixin, FormView):
         qs = self.get_queryset()
         euros = qs.aggregate(out=Sum('euros'))['out'] or 0.0
         if euros == form.cleaned_data['euros']:
-            qs.update(fecha_cierre=timezone.now())
+            qs.update(fecha_caja=timezone.now())
         return redirect
 
 
