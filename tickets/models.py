@@ -87,7 +87,7 @@ class Salida(models.Model):
     objects = SalidaQuerySet.as_manager()
 
     def __unicode__(self):
-        return "{} ({} minutos) por {}".format(self.fecha, self.minutos, self.operario.user.username)
+        return "{} ({:.2f} minutos) por {}".format(self.fecha, self.minutos, self.operario.user.username)
 
     def minutos_str(self):
         return _hhmm(self.minutos)
