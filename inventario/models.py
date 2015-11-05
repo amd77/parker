@@ -77,7 +77,7 @@ class Parking(models.Model):
     def get_tarifa(self, minutos):
         "Obtener una tarifa del tarifario"
         for min0, min1, precio in self.tupla_tarifa():
-            if min0 <= minutos <= min1:
+            if min0 <= minutos < min1+1:
                 return precio
 
     @property
