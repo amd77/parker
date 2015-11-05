@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from empresa.models import Operario, Abonado, Factura
 from inventario.models import Expendedor, _hhmm
+from django.db.models import Sum
 # import datetime
 
 TZ = timezone.get_default_timezone()
@@ -12,19 +13,24 @@ TZ = timezone.get_default_timezone()
 
 class EntradaQuerySet(models.QuerySet):
     def de_hoy(self):
-        now = timezone.now()
+        return self.por_dia(timezone.now())
+
+    def por_dia(self, now):
         inicio = now.replace(hour=0, minute=0, second=0, microsecond=0)
         fin = now.replace(hour=23, minute=59, second=59, microsecond=999999)
-        return self.filter(fecha_post__gt=inicio, fecha_post__lt=fin)
+        return self.filter(fecha_post__range=(inicio, fin))
 
     def por_parking(self, parking):
         return self.filter(expendedor__parking=parking)
 
     def por_operario(self, operario):
-        return self.filter(operario=operario)
+        return self.filter(salida__operario=operario)
 
     def dentro(self):
         return self.filter(salida__isnull=True)
+
+    def euros(self):
+        return self.aggregate(out=Sum('salida__euros'))['out'] or 0.0
 
 
 class Entrada(models.Model):
@@ -62,6 +68,9 @@ class SalidaQuerySet(models.QuerySet):
 
     def sin_cerrar(self):
         return self.filter(fecha_caja__isnull=True)
+
+    def euros(self):
+        return self.aggregate(out=Sum('euros'))['out'] or 0.0
 
 
 class Salida(models.Model):

@@ -1,0 +1,40 @@
+{% extends "common/parker.html" %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+<style>
+.superbig { font-size: 250%; }
+.big { font-size: 200%; }
+.big input { width: 5em; }
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<h1>Estadísticas de {{month|date:"F Y"}}</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Día</th>
+            <th>Tickets emitidos</th>
+            <th>Tickets recibidos</th>
+            <th>Tickets cierre caja</th>
+            {% for operario in empresa.operario_set.all %}
+            <th>{{operario.user.username}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in fechas %}
+            <tr>
+                <td><a href="{% url 'estadisticas_day' obj.fecha.year obj.fecha.month obj.fecha.day %}">{{obj.fecha|date:"d"}}</a></td>
+                <td>{{obj.dentro.count}}</td>
+                <td>{{obj.fuera.count}} ({{obj.fuera.euros}} €)</td>
+                <td>{{obj.caja.count}} ({{obj.caja.euros}} €)</td>
+                {% for operario in obj.gente %}
+                <td>{{operario.count}} ({{operario.euros}} €)</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}

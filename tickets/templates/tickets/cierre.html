@@ -57,29 +57,3 @@
     </div>
 </div>
 {% endblock body %}
-
-{% block extra_foot %}
-    <script type="text/javascript">
-    $(function() {
-        // form initial focus (tanto form calculadora como codigo)
-        var inp = $('input:text:visible:first');
-        inp.focus().select();
-        // form force focus (tanto form calculadora como codigo)
-        inp.focusout(function() {
-            inp.focus();
-        });
-        // widget calculadora
-        var el = $("#entregado");
-        el.val("");
-        el.bind('keyup', function() {
-            var euros = parseFloat('{{salida.euros}}'.replace(',','.'));
-            var contado = parseFloat(el.val()) - euros;
-            if (contado > 0) {
-                $("#resultado").html(contado.toFixed(2).replace('.', ',') + " €");
-            } else {
-                $("#resultado").html("-");
-            }
-        });
-    });
-    </script>
-{% endblock extra_foot %}

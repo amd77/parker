@@ -101,20 +101,8 @@ class EntradaArchiveMixin(object):
     def get_queryset(self):
         qs = super(EntradaArchiveMixin, self).get_queryset()
         qs = qs.filter(expendedor__parking=self.parking)
-        qs = qs.filter(salida__isnull=True)
+        # qs = qs.filter(salida__isnull=True)
         return qs.order_by('fecha_post')
-
-
-class SalidaArchiveMixin(object):
-    month_format = "%m"
-    model = Entrada
-    date_field = "fecha_post"
-
-    def get_queryset(self):
-        qs = super(SalidaArchiveMixin, self).get_queryset()
-        qs = qs.filter(expendedor__parking=self.parking)
-        qs = qs.filter(salida__isnull=False)
-        return qs.order_by('salida__fecha')
 
 
 class EntradaTodayList(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
@@ -125,17 +113,27 @@ class EntradaDayList(OperarioMixin, EntradaArchiveMixin, DayArchiveView):
     pass
 
 
-class SalidaTodayList(OperarioMixin, SalidaArchiveMixin, TodayArchiveView):
-    pass
+class EntradaMonthList(OperarioMixin, EntradaArchiveMixin, MonthArchiveView):
+    def get_context_data(self, **kwargs):
+        context = super(EntradaMonthList, self).get_context_data(**kwargs)
+        fechas = []
+
+        for fecha_inicio in context['date_list']:
+            fecha_fin = fecha_inicio + datetime.timedelta(days=1)
+            qs = context['object_list'].filter(fecha_post__range=(fecha_inicio, fecha_fin))
+            qs_caja = qs.filter(salida__fecha_caja__isnull=False)
+            gente = [qs_caja.por_operario(operario) for operario in self.empresa.operario_set.all()]
+            d = {
+                "fecha": fecha_inicio,
+                "dentro": qs,
+                "fuera": qs.filter(salida__isnull=False),
+                "caja": qs.filter(salida__fecha_caja__isnull=False),
+                "gente": gente,
+            }
+            fechas.append(d)
+        context['fechas'] = fechas
+        return context
 
 
-class SalidaDayList(OperarioMixin, SalidaArchiveMixin, DayArchiveView):
-    pass
-
-
-class SalidaMonthList(OperarioMixin, SalidaArchiveMixin, MonthArchiveView):
-    pass
-
-
-class SalidaYearList(OperarioMixin, SalidaArchiveMixin, YearArchiveView):
+class EntradaYearList(OperarioMixin, EntradaArchiveMixin, YearArchiveView):
     pass

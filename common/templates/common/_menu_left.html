@@ -6,10 +6,8 @@
 <li class="dropdown">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas<span class="caret"></a>
     <ul role="menu" class="dropdown-menu">
-        <li><a href="{% url 'dentro_today' %}">Dentro hoy</a></li>
-        <li><a href="{% url 'fuera_today' %}">Fuera hoy</a></li>
-        <li><a href="{% url 'fuera_month' now.year now.month %}"><i class="glyphicon glyphicon-remove"></i> Este mes</a></li>
-        <li><a href="{% url 'fuera_year' now.year %}"><i class="glyphicon glyphicon-remove"></i> Este año</a></li>
+        <li><a href="{% url 'estadisticas_day' now.year now.month now.day %}">Hoy</a></li>
+        <li><a href="{% url 'estadisticas_month' now.year now.month %}">Este mes</a></li>
     </ul>
 </li>
 {% endif %}
