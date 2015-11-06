@@ -18,7 +18,7 @@
             <th>Tickets emitidos</th>
             <th>Tickets recibidos</th>
             <th>Tickets cierre caja</th>
-            {% for operario in empresa.operario_set.all %}
+            {% for operario in operarios %}
             <th>{{operario.user.username}}</th>
             {% endfor %}
         </tr>

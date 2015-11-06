@@ -116,13 +116,14 @@ class EntradaDayList(OperarioMixin, EntradaArchiveMixin, DayArchiveView):
 class EntradaMonthList(OperarioMixin, EntradaArchiveMixin, MonthArchiveView):
     def get_context_data(self, **kwargs):
         context = super(EntradaMonthList, self).get_context_data(**kwargs)
+        context['operarios'] = self.empresa.operario_set.filter(es_administrador=False)
         fechas = []
 
         for fecha_inicio in context['date_list']:
             fecha_fin = fecha_inicio + datetime.timedelta(days=1)
             qs = context['object_list'].filter(fecha_post__range=(fecha_inicio, fecha_fin))
             qs_caja = qs.filter(salida__fecha_caja__isnull=False)
-            gente = [qs_caja.por_operario(operario) for operario in self.empresa.operario_set.filter(es_administrador=False)]
+            gente = [qs_caja.por_operario(operario) for operario in context['operarios']]
             d = {
                 "fecha": fecha_inicio,
                 "dentro": qs,
