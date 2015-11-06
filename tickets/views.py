@@ -122,7 +122,7 @@ class EntradaMonthList(OperarioMixin, EntradaArchiveMixin, MonthArchiveView):
             fecha_fin = fecha_inicio + datetime.timedelta(days=1)
             qs = context['object_list'].filter(fecha_post__range=(fecha_inicio, fecha_fin))
             qs_caja = qs.filter(salida__fecha_caja__isnull=False)
-            gente = [qs_caja.por_operario(operario) for operario in self.empresa.operario_set.all()]
+            gente = [qs_caja.por_operario(operario) for operario in self.empresa.operario_set.filter(es_administrador=False)]
             d = {
                 "fecha": fecha_inicio,
                 "dentro": qs,
