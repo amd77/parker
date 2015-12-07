@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^matriculas/', include('matriculas.urls')),
 ]
 
 urlpatterns = [
