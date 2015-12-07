@@ -41,14 +41,12 @@ class CreatePost(View):
 class UpdatePost(View):
     def post(self, request, *args, **kwargs):
         codigo = request.POST.get('codigo')
-        fecha_apertura = request.POST.get('fecha_apertura')
-        fecha_cierre = request.POST.get('fecha_cierre')
         try:
+            fecha_apertura = float(request.POST.get('fecha_apertura'))
+            fecha_apertura = datetime.datetime.fromtimestamp(fecha_apertura)
             obj = Entrada.objects.get(codigo=codigo)
             if fecha_apertura:
                 obj.fecha_apertura = fecha_apertura
-            if fecha_cierre:
-                obj.fecha_cierre = fecha_cierre
             obj.save()
             return HttpResponse("ok: {}".format(obj.pk))
         except Exception as e:
