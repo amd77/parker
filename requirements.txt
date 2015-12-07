@@ -3,3 +3,4 @@ gunicorn
 pytz
 django-extensions
 django-crispy-forms
+Pillow

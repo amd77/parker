@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.apps import apps
 from empresa.models import Empresa
+import os
+import tempfile
 
 
 def _bressenham(x0, y0, x1, y1):
@@ -98,6 +100,18 @@ class Expendedor(models.Model):
     parking = models.ForeignKey(Parking)
     nombre = models.CharField(max_length=40)
     mac = models.CharField(max_length=17)
+    camera_command = models.CharField(max_length=255, blank=True, null=True, help_text="Comando para la camara, con {} donde queramos poner el output filename")
+
+    def saca_foto(self):
+        contenido = None
+        if self.camera_command:
+            filename = tempfile.mktemp()
+            ret = os.system(self.camera_command.format(filename))
+            if ret == 0:
+                contenido = open(filename).read()
+            if os.path.isfile(filename):
+                os.unlink(filename)
+        return contenido
 
     def __unicode__(self):
         return "{} de {}".format(self.nombre, self.parking.nombre)

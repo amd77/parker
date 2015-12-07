@@ -4,6 +4,7 @@ import datetime
 from django.views.generic import View, FormView
 from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthArchiveView, YearArchiveView
 from django.utils import timezone
+from django.core.files.base import ContentFile
 
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse_lazy
@@ -18,13 +19,21 @@ class CreatePost(View):
     def post(self, request, *args, **kwargs):
         mac = request.POST.get('mac')
         codigo = request.POST.get('codigo')
-        fecha_solicitud = float(request.POST.get('fecha_solicitud'))
-        fecha_solicitud = datetime.datetime.fromtimestamp(fecha_solicitud)
         try:
+            fecha_solicitud = float(request.POST.get('fecha_solicitud'))
+            fecha_solicitud = datetime.datetime.fromtimestamp(fecha_solicitud)
             exp = Expendedor.objects.get(mac=mac)
             obj = Entrada.objects.create(expendedor=exp, codigo=codigo,
                                          fecha_solicitud=fecha_solicitud)
-            return HttpResponse("ok: {}".format(obj.pk))
+
+            filename = "foto_{}.jpg".format(obj.pk)
+            contenido = exp.saca_foto()
+            if contenido:
+                obj.foto.save(filename, ContentFile(contenido))
+                return HttpResponse("ok: {}".format(obj.pk))
+            else:
+                return HttpResponse("ok: {} (sin foto)".format(obj.pk))
+
         except Exception as e:
             return HttpResponseBadRequest("ko: {}".format(e))
 

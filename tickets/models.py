@@ -41,6 +41,7 @@ class Entrada(models.Model):
     fecha_solicitud = models.DateTimeField()
     fecha_apertura = models.DateTimeField(blank=True, null=True)
     fecha_cierre = models.DateTimeField(blank=True, null=True)
+    foto = models.ImageField(upload_to="fotos/%Y/%m/%d", blank=True, null=True)
 
     objects = EntradaQuerySet.as_manager()
 
