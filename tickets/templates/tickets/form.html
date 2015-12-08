@@ -44,6 +44,10 @@
                         <dd>{{salida.fecha_salida_str}}</dd>
                         <dt>Resta</dt>
                         <dd>{{salida.minutos_str}}</dd>
+                        {% if salida.abonado %}
+                        <dt>Abonado</dt>
+                        <dd>{{salida.abonado}}</dd>
+                        {% endif %}
                     </dl>
             {% elif error %}
                 <div class="col-md-12">
@@ -54,9 +58,16 @@
             {% if form %}
                 <div class="col-md-12">
                     <form class="form" method="POST" action="">
+                        {% if form.abonado_obj %}
+                            <h1>Abonado: {{form.abonado_obj}}</h1>
+                            <h3>Pase el ticket</h3>
+                        {% else %}
+                            <h3>Pase el carnet de abonado o el ticket</h3>
+                        {% endif %}
                         {{ form|crispy }}
                         {% csrf_token %}
                         <button class="btn btn-primary" type="submit">Validar codigo</button>
+                        <a href="{% url 'inicio' %}" class="btn btn-secondary">Limpiar</a>
                     </form>
                 </div>
             {% else %}

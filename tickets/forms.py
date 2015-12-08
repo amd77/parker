@@ -2,21 +2,37 @@
 
 from __future__ import unicode_literals
 from django import forms
-from .models import Entrada
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
+from .models import Entrada
+from empresa.models import Abonado
 
 
 class TicketForm(forms.Form):
-    codigo = forms.CharField(max_length=13)
+    cosa = forms.CharField(max_length=13, required=False, label="")
+    entrada = forms.CharField(max_length=13, required=False, widget=forms.HiddenInput)
+    abonado = forms.CharField(max_length=13, required=False, widget=forms.HiddenInput)
 
-    def clean_codigo(self):
-        codigo = self.cleaned_data['codigo']
+    def clean_cosa(self):
+        cosa = self.cleaned_data['cosa']
+        if cosa:
+            raise forms.ValidationError("Desconocido")
+
+    def clean_entrada(self):
+        codigo = self.cleaned_data['entrada']
         try:
-            self.entrada = Entrada.objects.get(codigo=codigo)
+            self.entrada_obj = Entrada.objects.get(codigo=codigo)
+            return self.entrada_obj
         except Entrada.DoesNotExist:
-            raise forms.ValidationError("Código no se encuentra")
-        return codigo
+            return None
+
+    def clean_abonado(self):
+        codigo = self.cleaned_data['abonado']
+        try:
+            self.abonado_obj = Abonado.objects.get(codigo=codigo)
+            return self.abonado_obj
+        except Abonado.DoesNotExist:
+            return None
 
 
 class CierreForm(forms.Form):

@@ -107,14 +107,14 @@ class Salida(models.Model):
             return self.entrada.fecha
 
     @staticmethod
-    def crea_por_entrada(entrada, operario):
+    def crea_por_entrada(entrada, operario, abonado=None):
         try:
             return False, entrada.salida
         except AttributeError:
             pass
         fecha = timezone.now()
         minutos = (fecha - entrada.fecha).total_seconds() / 60.0
-        euros = entrada.expendedor.parking.get_tarifa(minutos)
+        euros = entrada.expendedor.parking.get_tarifa(minutos) if not abonado else 0.0
         return True, Salida.objects.create(entrada=entrada, fecha=fecha,
                                            minutos=minutos, euros=euros,
-                                           operario=operario)
+                                           operario=operario, abonado=abonado)

@@ -13,6 +13,7 @@ from django.db.models import Sum
 from .models import Entrada, Salida
 from .forms import TicketForm, CierreForm
 from inventario.models import Expendedor
+from empresa.models import Abonado
 
 
 class CreatePost(View):
@@ -91,12 +92,29 @@ class TicketFormView(OperarioMixin, FormView):
     form_class = TicketForm
     success_url = reverse_lazy('ticket_form')
 
+    def get_form_kwargs(self):
+        kwargs = super(TicketFormView, self).get_form_kwargs()
+        if kwargs.get('data', {}).get('cosa'):
+            data = kwargs['data'] = kwargs['data'].copy()  # make form writable!
+            if Abonado.objects.filter(codigo=data['cosa']):
+                data['abonado'] = data['cosa']
+                data['cosa'] = ''
+            elif Entrada.objects.filter(codigo=data['cosa']):
+                data['entrada'] = data['cosa']
+                data['cosa'] = ''
+        return kwargs
+
     def form_valid(self, form):
         context = {}
-        creado, salida = Salida.crea_por_entrada(form.entrada, self.operario)
-        context['entrada'] = form.entrada
-        context['salida'] = salida
-        context['creado'] = creado
+        abonado = form.cleaned_data.get('abonado')
+        entrada = form.cleaned_data.get('entrada')
+        if entrada:
+            creado, salida = Salida.crea_por_entrada(entrada, self.operario, abonado)
+            context['entrada'] = entrada
+            context['salida'] = salida
+            context['creado'] = creado
+        else:
+            context['form'] = form
         return self.render_to_response(self.get_context_data(**context))
 
 

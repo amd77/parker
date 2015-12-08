@@ -22,6 +22,7 @@
             <th>Minutos</th>
             <th>€</th>
             <th>operario</th>
+            <th>abonado</th>
             <th>caja</th>
         </tr>
     </thead>
@@ -36,6 +37,7 @@
             <td>{{object.salida.minutos|floatformat:0}}</td>
             <td>{{object.salida.euros|floatformat:2}}</td>
             <td>{{object.salida.operario.user.username}}</td>
+            <td>{{object.salida.abonado|default:""}}</td>
             <td>{% if object.salida %}{{object.salida.fecha_caja|yesno:",no"}}{% endif %}</td>
         </tr>
         {% endfor %}
