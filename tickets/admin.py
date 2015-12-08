@@ -12,5 +12,13 @@ class EntradaAdmin(admin.ModelAdmin):
     list_filter = ('expendedor', )
     readonly_fields = ('fecha_post', )
     inlines = (SalidaInline, )
+    actions = ['borra_salidas', ]
+
+    def borra_salidas(self, request, queryset):
+        for obj in queryset:
+            try:
+                obj.salida.delete()
+            except Salida.DoesNotExist:
+                pass
 
 admin.site.register(Entrada, EntradaAdmin)
