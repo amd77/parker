@@ -91,15 +91,18 @@ class TicketFormView(OperarioMixin, FormView):
     template_name = "tickets/form.html"
     form_class = TicketForm
     success_url = reverse_lazy('ticket_form')
+    initial = {'cobrar': '1'}
 
     def get_form_kwargs(self):
         kwargs = super(TicketFormView, self).get_form_kwargs()
-        if kwargs.get('data', {}).get('cosa'):
+        if kwargs.get('data'):
             data = kwargs['data'] = kwargs['data'].copy()  # make form writable!
-            if Abonado.objects.filter(codigo=data['cosa']):
+            if data['cobrar'] != '1':
+                data['cobrar'] = '1'  # hacemos paso intermedio
+            elif Abonado.objects.filter(codigo=data.get('cosa')):
                 data['abonado'] = data['cosa']
                 data['cosa'] = ''
-            elif Entrada.objects.filter(codigo=data['cosa']):
+            elif Entrada.objects.filter(codigo=data.get('cosa')):
                 data['entrada'] = data['cosa']
                 data['cosa'] = ''
         return kwargs
@@ -108,12 +111,14 @@ class TicketFormView(OperarioMixin, FormView):
         context = {}
         abonado = form.cleaned_data.get('abonado')
         entrada = form.cleaned_data.get('entrada')
-        if entrada:
+        cobrar = form.cleaned_data.get('cobrar')
+        if entrada and cobrar:
             creado, salida = Salida.crea_por_entrada(entrada, self.operario, abonado)
             context['entrada'] = entrada
             context['salida'] = salida
             context['creado'] = creado
         else:
+            form.data['cobrar'] = '1'
             context['form'] = form
         return self.render_to_response(self.get_context_data(**context))
 

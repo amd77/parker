@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
-from .models import Entrada
+from .models import Entrada, Salida
 from empresa.models import Abonado
 
 
@@ -12,27 +12,33 @@ class TicketForm(forms.Form):
     cosa = forms.CharField(max_length=13, required=False, label="")
     entrada = forms.CharField(max_length=13, required=False, widget=forms.HiddenInput)
     abonado = forms.CharField(max_length=13, required=False, widget=forms.HiddenInput)
-
-    def clean_cosa(self):
-        cosa = self.cleaned_data['cosa']
-        if cosa:
-            raise forms.ValidationError("Desconocido")
+    cobrar = forms.BooleanField(required=False, widget=forms.HiddenInput)
 
     def clean_entrada(self):
         codigo = self.cleaned_data['entrada']
         try:
-            self.entrada_obj = Entrada.objects.get(codigo=codigo)
-            return self.entrada_obj
+            entrada = Entrada.objects.get(codigo=codigo)
         except Entrada.DoesNotExist:
             return None
+        try:
+            if entrada.salida:
+                self.add_error("cosa", "Ticket ya validado")
+                return None
+        except Salida.DoesNotExist:
+            pass
+
+        self.entrada_obj = entrada
+        return entrada
 
     def clean_abonado(self):
         codigo = self.cleaned_data['abonado']
         try:
-            self.abonado_obj = Abonado.objects.get(codigo=codigo)
-            return self.abonado_obj
+            abonado = Abonado.objects.get(codigo=codigo)
         except Abonado.DoesNotExist:
             return None
+
+        self.abonado_obj = abonado
+        return abonado
 
 
 class CierreForm(forms.Form):

@@ -11,14 +11,18 @@
 {% block body %}
 <div class="container-fluid">
     <div class="row">
-        {% for object in object_list %}
-        <div class="col-md-3 col-sm-4 col-xs-6 pad">
-            <img class="img-responsive" src="{{object.foto.url}}" />
-            <div class="button">
-                <a class="btn btn-default btn-xs" href="">{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></a>
+        <form class="form" method="POST" action="{% url 'inicio' %}">
+            <input type="hidden" name="cobrar" value="0"/>
+            {% csrf_token %}
+            {% for object in object_list %}
+            <div class="col-md-3 col-sm-4 col-xs-6 pad">
+                <img class="img-responsive" src="{{object.foto.url}}" />
+                <div class="button">
+                    <button class="btn btn-default btn-xs" name="cosa" value="{{object.codigo}}">{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></button>
+                </div>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+        </form>
     </div>
 </div>
 {% endblock body %}

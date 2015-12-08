@@ -60,9 +60,19 @@
                     <form class="form" method="POST" action="">
                         {% if form.abonado_obj %}
                             <h1>Abonado: {{form.abonado_obj}}</h1>
-                            <h3>Pase el ticket</h3>
+                            {% if form.entrada_obj %}
+                                Ticket {{form.entrada_obj.codigo}}<br/>
+                                <h3>Pulse el boton para cobrar</h3>
+                            {% else %}
+                                <h3>Pase el ticket</h3>
+                            {% endif %}
                         {% else %}
-                            <h3>Pase el carnet de abonado o el ticket</h3>
+                            {% if form.entrada_obj %}
+                                Ticket {{form.entrada_obj.codigo}} 
+                                <h3>Pulse el boton para cobrar</h3>
+                            {% else %}
+                                <h3>Pase el carnet de abonado o el ticket</h3>
+                            {% endif %}
                         {% endif %}
                         {{ form|crispy }}
                         {% csrf_token %}
