@@ -6,3 +6,4 @@ ADMINS = (
     ('Superadmins', 'root@kreitek.org'),
 )
 MANAGERS = ADMINS
+MEDIA_ROOT = "/media/usbstore"
