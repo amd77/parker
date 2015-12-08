@@ -1,9 +1,9 @@
 {% if user.is_authenticated %}
-<li><a href="{% url 'tarifas' %}">Tarifas</a></li>
+<li><a href="{% url 'fotos_today' 'dentro' %}">Fotos</a></li>
 <li><a href="{% url 'ticket_cierre' %}">Cierre de caja</a></li>
+<li><a href="{% url 'tarifas' %}">Tarifas</a></li>
 {% endif %}
 {% if operario.es_administrador %}
-<li><a href="{% url 'fotos_today' 'dentro' %}">Fotos</a></li>
 <li class="dropdown">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas<span class="caret"></a>
     <ul role="menu" class="dropdown-menu">
