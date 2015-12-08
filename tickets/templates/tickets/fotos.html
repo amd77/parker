@@ -10,7 +10,7 @@
 
 {% block body %}
 <div class="container-fluid">
-    <h1>Fotos de los {{object_list.count}} coches que hay dentro</h1>
+    <h1>Fotos de los {{object_list.count}} coches que hay {{cuales}}</h1>
     <h3>Pulse en el botón de la hora para conseguir su código de salida</h3>
     <div class="row">
         <form class="form" method="POST" action="{% url 'inicio' %}">

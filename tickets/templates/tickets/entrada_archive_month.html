@@ -10,7 +10,20 @@
 {% endblock extra_head %}
 
 {% block body %}
-<h1>Estadísticas de {{month|date:"F Y"}}</h1>
+<h1>
+    {{month|date:"F Y"}}
+    <div class="btn-group pull-right" role="group" aria-label="modo">
+        {% if previous_month %}
+        <a href="{% url 'estadisticas_month' previous_month.year previous_month.month cuales %}" class="btn btn-default"><i class="glyphicon glyphicon-backward"></i> mes anterior</a>
+        {% endif %}
+        <a href="{% url 'estadisticas_month' month.year month.month 'todas' %}" class="btn btn-default {% if cuales == 'todas' %}active{% endif %}"><i class="glyphicon glyphicon-question-sign"></i> Todas</a>
+        <a href="{% url 'estadisticas_month' month.year month.month 'fuera' %}" class="btn btn-default {% if cuales == 'caja' %}active{% endif %}"><i class="glyphicon glyphicon-remove-sign"></i> Informal</a>
+        <a href="{% url 'estadisticas_month' month.year month.month 'caja' %}" class="btn btn-default {% if cuales == 'caja' %}active{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i> Solo cerradas</a>
+        {% if next_month %}
+        <a href="{% url 'estadisticas_month' next_month.year next_month.month cuales %}" class="btn btn-default">mes siguiente <i class="glyphicon glyphicon-forward"></i></a>
+        {% endif %}
+    </div>
+</h1>
 <table class="table">
     <thead>
         <tr>
@@ -26,7 +39,7 @@
     <tbody>
         {% for obj in fechas %}
             <tr>
-                <td><a href="{% url 'estadisticas_day' obj.fecha.year obj.fecha.month obj.fecha.day %}">{{obj.fecha|date:"d"}}</a></td>
+                <td><a href="{% url 'estadisticas_day' obj.fecha.year obj.fecha.month obj.fecha.day cuales %}">{{obj.fecha|date:"d"}}</a></td>
                 <td>{{obj.dentro.count}}</td>
                 <td>{{obj.fuera.count}} ({{obj.fuera.euros}} €)</td>
                 <td>{{obj.caja.count}} ({{obj.caja.euros}} €)</td>

@@ -13,7 +13,7 @@ from django.db.models import Sum
 from .models import Entrada, Salida
 from .forms import TicketForm, CierreForm
 from inventario.models import Expendedor
-from empresa.models import Abonado
+from empresa.models import Abonado, Operario
 
 
 class CreatePost(View):
@@ -127,12 +127,25 @@ class EntradaArchiveMixin(object):
     month_format = "%m"
     model = Entrada
     date_field = "fecha_post"
+    allow_empty = True
 
     def get_queryset(self):
         qs = super(EntradaArchiveMixin, self).get_queryset()
         qs = qs.filter(expendedor__parking=self.parking)
-        # qs = qs.filter(salida__isnull=True)
+        if self.kwargs['cuales'] == 'caja':
+            qs = qs.filter(salida__fecha_caja__isnull=False)
+        elif self.kwargs['cuales'] == 'fuera':
+            qs = qs.filter(salida__isnull=False)
+        elif self.kwargs['cuales'] == 'dentro':
+            qs = qs.filter(salida__isnull=True)
+        else:
+            pass
         return qs.order_by('fecha_post')
+
+    def get_context_data(self, **kwargs):
+        context = super(EntradaArchiveMixin, self).get_context_data(**kwargs)
+        context['cuales'] = self.kwargs['cuales'] or 'todos'
+        return context
 
 
 class EntradaTodayList(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
@@ -146,19 +159,19 @@ class EntradaDayList(OperarioMixin, EntradaArchiveMixin, DayArchiveView):
 class EntradaMonthList(OperarioMixin, EntradaArchiveMixin, MonthArchiveView):
     def get_context_data(self, **kwargs):
         context = super(EntradaMonthList, self).get_context_data(**kwargs)
-        context['operarios'] = self.empresa.operario_set.filter(es_administrador=False)
+        operarios = set(context['object_list'].values_list('salida__operario', flat=True).distinct())
+        context['operarios'] = Operario.objects.filter(pk__in=operarios)
         fechas = []
 
         for fecha_inicio in context['date_list']:
             fecha_fin = fecha_inicio + datetime.timedelta(days=1)
             qs = context['object_list'].filter(fecha_post__range=(fecha_inicio, fecha_fin))
-            qs_caja = qs.filter(salida__fecha_caja__isnull=False)
-            gente = [qs_caja.por_operario(operario) for operario in context['operarios']]
+            gente = [qs.por_operario(operario) for operario in context['operarios']]
             d = {
                 "fecha": fecha_inicio,
                 "dentro": qs,
                 "fuera": qs.filter(salida__isnull=False),
-                "caja": qs.filter(salida__fecha_caja__isnull=False),
+                "caja": qs,
                 "gente": gente,
             }
             fechas.append(d)
@@ -172,6 +185,3 @@ class EntradaYearList(OperarioMixin, EntradaArchiveMixin, YearArchiveView):
 
 class FotoToday(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
     template_name = "tickets/fotos.html"
-
-    def get_queryset(self):
-        return super(EntradaArchiveMixin, self).get_queryset().filter(salida__isnull=True)

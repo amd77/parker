@@ -3,12 +3,12 @@
 <li><a href="{% url 'ticket_cierre' %}">Cierre de caja</a></li>
 {% endif %}
 {% if operario.es_administrador %}
-<li><a href="{% url 'fotos_today' %}">Fotos</a></li>
+<li><a href="{% url 'fotos_today' 'dentro' %}">Fotos</a></li>
 <li class="dropdown">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas<span class="caret"></a>
     <ul role="menu" class="dropdown-menu">
-        <li><a href="{% url 'estadisticas_day' now.year now.month now.day %}">Hoy</a></li>
-        <li><a href="{% url 'estadisticas_month' now.year now.month %}">Este mes</a></li>
+        <li><a href="{% url 'estadisticas_day' now.year now.month now.day 'todas' %}">Hoy</a></li>
+        <li><a href="{% url 'estadisticas_month' now.year now.month 'todas' %}">Este mes</a></li>
     </ul>
 </li>
 {% endif %}
