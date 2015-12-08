@@ -1,0 +1,24 @@
+{% extends "common/parker.html" %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+<style>
+    div.button { position:absolute; right: 20px; bottom: 5px; }
+    div.pad { margin-bottom: 10px; }
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        {% for object in object_list %}
+        <div class="col-md-3 col-sm-4 col-xs-6 pad">
+            <img class="img-responsive" src="{{object.foto.url}}" />
+            <div class="button">
+                <a class="btn btn-default btn-xs" href="">{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock body %}

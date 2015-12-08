@@ -145,3 +145,10 @@ class EntradaMonthList(OperarioMixin, EntradaArchiveMixin, MonthArchiveView):
 
 class EntradaYearList(OperarioMixin, EntradaArchiveMixin, YearArchiveView):
     pass
+
+
+class FotoToday(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
+    template_name = "tickets/fotos.html"
+
+    def get_queryset(self):
+        return super(EntradaArchiveMixin, self).get_queryset().filter(salida__isnull=True)

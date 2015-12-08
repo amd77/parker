@@ -3,6 +3,7 @@
 <li><a href="{% url 'ticket_cierre' %}">Cierre de caja</a></li>
 {% endif %}
 {% if operario.es_administrador %}
+<li><a href="{% url 'fotos_today' %}">Fotos</a></li>
 <li class="dropdown">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas<span class="caret"></a>
     <ul role="menu" class="dropdown-menu">
