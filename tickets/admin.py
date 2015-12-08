@@ -9,7 +9,7 @@ class SalidaInline(admin.TabularInline):
 class EntradaAdmin(admin.ModelAdmin):
     date_hierarchy = 'fecha_solicitud'
     list_display = ('codigo', 'expendedor', 'fecha_solicitud', 'fecha_apertura', 'salida')
-    list_filter = ('expendedor', )
+    list_filter = ('expendedor', 'salida__operario')
     readonly_fields = ('fecha_post', )
     inlines = (SalidaInline, )
     actions = ['borra_salidas', ]
