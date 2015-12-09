@@ -84,6 +84,7 @@ class Salida(models.Model):
     abonado = models.ForeignKey(Abonado, blank=True, null=True)
     factura = models.ForeignKey(Factura, blank=True, null=True)
     fecha_caja = models.DateTimeField(blank=True, null=True)
+    perdido = models.BooleanField(default=False)
 
     objects = SalidaQuerySet.as_manager()
 
@@ -107,7 +108,7 @@ class Salida(models.Model):
             return self.entrada.fecha
 
     @staticmethod
-    def crea_por_entrada(entrada, operario, abonado=None):
+    def crea_por_entrada(entrada, operario, abonado=None, perdido=False):
         try:
             return False, entrada.salida
         except AttributeError:
@@ -117,4 +118,5 @@ class Salida(models.Model):
         euros = entrada.expendedor.parking.get_tarifa(minutos) if not abonado else 0.0
         return True, Salida.objects.create(entrada=entrada, fecha=fecha,
                                            minutos=minutos, euros=euros,
-                                           operario=operario, abonado=abonado)
+                                           operario=operario, abonado=abonado,
+                                           perdido=perdido)

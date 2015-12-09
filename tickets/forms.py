@@ -13,6 +13,7 @@ class TicketForm(forms.Form):
     entrada = forms.CharField(max_length=13, required=False, widget=forms.HiddenInput)
     abonado = forms.CharField(max_length=13, required=False, widget=forms.HiddenInput)
     cobrar = forms.BooleanField(required=False, widget=forms.HiddenInput)
+    perdido = forms.BooleanField(required=False, widget=forms.HiddenInput)
 
     def clean_entrada(self):
         codigo = self.cleaned_data['entrada']

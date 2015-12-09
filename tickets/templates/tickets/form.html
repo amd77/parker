@@ -74,6 +74,9 @@
                                 <h3>Pase el carnet de abonado o el ticket</h3>
                             {% endif %}
                         {% endif %}
+                        {% if form.perdido.value %}
+                            <div class="alert alert-danger"><i class="glyphicon glyphicon-ok"></i> Anotado como que perdió el ticket <i class="glyphicon glyphicon-film pull-right"></i></div>
+                        {% endif %}
                         {{ form|crispy }}
                         {% csrf_token %}
                         <button class="btn btn-primary" type="submit">Validar codigo</button>

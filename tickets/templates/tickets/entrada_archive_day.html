@@ -36,7 +36,8 @@
             <th>€</th>
             <th>operario</th>
             <th>abonado</th>
-            <th>caja</th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -51,7 +52,8 @@
             <td>{{object.salida.euros|floatformat:2}}</td>
             <td>{{object.salida.operario.user.username}}</td>
             <td>{{object.salida.abonado|default:""}}</td>
-            <td>{% if object.salida %}{{object.salida.fecha_caja|yesno:"si,no"}}{% endif %}</td>
+            <td>{% if object.salida.perdido %}<a title="Ticket olvidado"><i class="glyphicon glyphicon-film"></i></a>{% endif %}</td>
+            <td>{% if object.salida.fecha_caja %}<a title="Cierre de caja"><i class="glyphicon glyphicon-ok"></i></a>{% endif %}</td>
         </tr>
         {% endfor %}
     </tbody>

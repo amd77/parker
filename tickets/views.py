@@ -112,8 +112,9 @@ class TicketFormView(OperarioMixin, FormView):
         abonado = form.cleaned_data.get('abonado')
         entrada = form.cleaned_data.get('entrada')
         cobrar = form.cleaned_data.get('cobrar')
+        perdido = form.cleaned_data.get('perdido', False)
         if entrada and cobrar:
-            creado, salida = Salida.crea_por_entrada(entrada, self.operario, abonado)
+            creado, salida = Salida.crea_por_entrada(entrada, self.operario, abonado, perdido)
             context['entrada'] = entrada
             context['salida'] = salida
             context['creado'] = creado
