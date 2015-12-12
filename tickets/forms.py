@@ -23,7 +23,7 @@ class TicketForm(forms.Form):
             return None
         try:
             if entrada.salida:
-                self.add_error("cosa", "Ticket ya validado")
+                self.add_error("cosa", "Ticket {} ya validado".format(codigo))
                 return None
         except Salida.DoesNotExist:
             pass
