@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.utils import timezone
@@ -21,7 +20,3 @@ class OperarioMixin(object):
         self.empresa = self.operario.empresa
         self.parking = self.empresa.parking
         return super(OperarioMixin, self).dispatch(*args, **kwargs)
-
-
-class Panel(OperarioMixin, TemplateView):
-    template_name = "empresa/panel.html"
