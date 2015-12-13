@@ -6,34 +6,7 @@ from django.apps import apps
 from empresa.models import Empresa
 import os
 import tempfile
-
-
-def _bressenham(x0, y0, x1, y1):
-    # http://rosettacode.org/wiki/Bitmap/Bresenham%27s_line_algorithm#Python
-    # con el yield cambiado de sitio para que no repita puntos
-    dx = float(abs(x1-x0))
-    dy = float(abs(y1-y0))
-    x, y = x0, y0
-    sx = -1 if x0 > x1 else 1
-    sy = -1 if y0 > y1 else 1
-    if dx > dy:
-        err = dx / 2.0
-        while x != x1:
-            err -= dy
-            yield (x, y)
-            if err < 0:
-                y += sy
-                err += dx
-            x += sx
-    else:
-        err = dy / 2.0
-        while y != y1:
-            err -= dx
-            if err < 0:
-                yield (x, y)
-                x += sx
-                err += dy
-            y += sy
+import datetime
 
 
 def _hhmm(minutos):
@@ -57,30 +30,36 @@ class Parking(models.Model):
 
     def tupla_tarifa(self):
         "Obtener un tarifario dada una recta definida por puntos"
-        lista = list(self.tarifa_set.all())
-        actual = lista[0]
-        for siguiente in lista[1:]:
-            x0, y0 = actual.minutos, actual.precio
-            dx, dy = actual.salto_minutos, actual.salto_precio
-            x1 = int(round((siguiente.minutos - x0)/dx))
-            y1 = int(round((siguiente.precio - y0)/dy))
-            for i, j in _bressenham(0, 0, x1, y1):
-                min0 = i*dx + x0
-                min1 = min0 + dx - 1
-                precio = j * dy + y0
-                yield (min0, min1, precio)
-            actual = siguiente
+        # creamos una lista de listas
+        lista = map(list, self.tarifa_set.values_list('precio', 'hora'))
+        # agregamos el rango final de tiempo sacado de la siguiente linea
+        n = len(lista)
+        for i in range(n-1):
+            lista[i].append(lista[i+1][1])
+        # el rango final ponemos que es 24h
+        lista[n-1].append(datetime.timedelta(days=1))
+        # devolvemos [precio, hora_start, hora_end_no_inclusive]
+        return lista
 
     def tabla_tarifa(self):
         "Tarifario con hh:mm para visualizar"
-        for min0, min1, precio in self.tupla_tarifa():
-            yield (_hhmm(min0), _hhmm(min1), precio)
+        for precio, min0, min1 in self.tupla_tarifa():
+            t = min1 - datetime.timedelta(seconds=1)
+            yield min0, t, precio
+
+    def get_dia(self):
+        return float(self.tarifa_set.last().precio)
 
     def get_tarifa(self, minutos):
         "Obtener una tarifa del tarifario"
-        for min0, min1, precio in self.tupla_tarifa():
-            if min0 <= minutos < min1+1:
-                return precio
+        td = datetime.timedelta(seconds=minutos*60)
+        # calculo de dias completos
+        precio_dias = td.days * self.get_dia()
+        # calculo de la fraccion de dia
+        td = datetime.timedelta(seconds=td.seconds)
+        for precio, min0, min1 in self.tupla_tarifa():
+            if min0 <= td < min1:
+                return precio_dias + float(precio)
 
     @property
     def entrada_set(self):
@@ -123,13 +102,19 @@ class Expendedor(models.Model):
 
 class Tarifa(models.Model):
     parking = models.ForeignKey(Parking)
-    minutos = models.IntegerField()
     precio = models.DecimalField(max_digits=5, decimal_places=2)
-    salto_minutos = models.IntegerField(default=10)
-    salto_precio = models.DecimalField(max_digits=5, decimal_places=2, default='0.1')
+    hora = models.DurationField(help_text="hora a partir de la cual aplica este precio")
 
     def __unicode__(self):
-        return "{} = {:.2f} €".format(_hhmm(self.minutos), self.precio)
+        return "{} = {:.2f} €".format(self.hora, self.precio)
 
     class Meta:
-        ordering = ('minutos', )
+        ordering = ('hora', )
+
+
+# from django.db.models.signals import pre_save
+# from django.dispatch import receiver
+# @receiver(pre_save, sender=Tarifa)
+# def anula_date(sender, instance, using, **kwargs):
+#     if isinstance(instance, datetime.datetime):
+#         instance.hora = instance.hora.replace(year=1970, month=1, day=1)

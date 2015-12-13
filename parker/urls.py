@@ -7,7 +7,6 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = [
-    url(r'^', include('empresa.urls')),
     url(r'^', include('inventario.urls')),
     url(r'^', include('tickets.urls')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
