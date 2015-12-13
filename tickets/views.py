@@ -2,7 +2,7 @@
 
 import datetime
 from django.views.generic import View, FormView
-from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthArchiveView, YearArchiveView
+from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthArchiveView
 from django.utils import timezone
 from django.core.files.base import ContentFile
 
@@ -124,11 +124,25 @@ class TicketFormView(OperarioMixin, FormView):
         return self.render_to_response(self.get_context_data(**context))
 
 
-class EntradaArchiveMixin(object):
+class ArchiveMixin(object):
     month_format = "%m"
+    allow_empty = True
+    que_es = "cambiame en el hijo"
+    template_name = "tickets/archive_day.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ArchiveMixin, self).get_context_data(**kwargs)
+        context['cuales'] = self.kwargs['cuales'] or 'todos'
+        context['que_es'] = self.que_es
+        context['url_dia'] = "estadisticas_{}_day".format(self.que_es)
+        context['url_mes'] = "estadisticas_{}_month".format(self.que_es)
+        return context
+
+
+class EntradaArchiveMixin(ArchiveMixin):
     model = Entrada
     date_field = "fecha_post"
-    allow_empty = True
+    que_es = "entrada"
 
     def get_queryset(self):
         qs = super(EntradaArchiveMixin, self).get_queryset()
@@ -141,15 +155,29 @@ class EntradaArchiveMixin(object):
             qs = qs.filter(salida__isnull=True)
         else:
             pass
-        return qs.order_by('fecha_post')
+        return qs.order_by(self.date_field)
 
-    def get_context_data(self, **kwargs):
-        context = super(EntradaArchiveMixin, self).get_context_data(**kwargs)
-        context['cuales'] = self.kwargs['cuales'] or 'todos'
-        return context
+
+class SalidaArchiveMixin(ArchiveMixin):
+    model = Salida
+    date_field = "fecha"
+    que_es = "salida"
+
+    def get_queryset(self):
+        qs = super(SalidaArchiveMixin, self).get_queryset()
+        qs = qs.filter(entrada__expendedor__parking=self.parking)
+        if self.kwargs['cuales'] == 'caja':
+            qs = qs.filter(fecha_caja__isnull=False)
+        else:
+            pass
+        return qs.order_by(self.date_field)
 
 
 class EntradaTodayList(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
+    pass
+
+
+class SalidaTodayList(OperarioMixin, SalidaArchiveMixin, TodayArchiveView):
     pass
 
 
@@ -157,30 +185,47 @@ class EntradaDayList(OperarioMixin, EntradaArchiveMixin, DayArchiveView):
     pass
 
 
-class EntradaMonthList(OperarioMixin, EntradaArchiveMixin, MonthArchiveView):
+class SalidaDayList(OperarioMixin, SalidaArchiveMixin, DayArchiveView):
+    pass
+
+
+class ResumenMensualMixin(object):
+    template_name = "tickets/archive_month.html"
+
     def get_context_data(self, **kwargs):
-        context = super(EntradaMonthList, self).get_context_data(**kwargs)
-        operarios = set(context['object_list'].values_list('salida__operario', flat=True).distinct())
+        context = super(ResumenMensualMixin, self).get_context_data(**kwargs)
+        if self.que_es == "salida":
+            operarios = set(context['object_list'].values_list("operario", flat=True).distinct())
+        elif self.que_es == "entrada":
+            operarios = set(context['object_list'].values_list("salida__operario", flat=True).distinct())
         context['operarios'] = Operario.objects.filter(pk__in=operarios)
         fechas = []
 
+        range_key = self.date_field + "__range"
         for fecha_inicio in context['date_list']:
             fecha_fin = fecha_inicio + datetime.timedelta(days=1)
-            qs = context['object_list'].filter(fecha_post__range=(fecha_inicio, fecha_fin))
+            range = {range_key: (fecha_inicio, fecha_fin)}
+            qs = context['object_list'].filter(**range)
             gente = [qs.por_operario(operario) for operario in context['operarios']]
             d = {
                 "fecha": fecha_inicio,
-                "dentro": qs,
-                "fuera": qs.filter(salida__isnull=False),
-                "caja": qs,
                 "gente": gente,
             }
+            if self.que_es == "entrada":
+                d["fuera"] = qs.filter(salida__isnull=False)
+                d["dentro"] = qs.filter(salida__isnull=True)
+            elif self.que_es == "salida":
+                d["fuera"] = qs
             fechas.append(d)
         context['fechas'] = fechas
         return context
 
 
-class EntradaYearList(OperarioMixin, EntradaArchiveMixin, YearArchiveView):
+class EntradaMonthList(OperarioMixin, ResumenMensualMixin, EntradaArchiveMixin, MonthArchiveView):
+    pass
+
+
+class SalidaMonthList(OperarioMixin, ResumenMensualMixin, SalidaArchiveMixin, MonthArchiveView):
     pass
 
 

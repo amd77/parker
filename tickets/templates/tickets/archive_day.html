@@ -1,0 +1,56 @@
+{% extends "common/parker.html" %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+<style>
+.superbig { font-size: 250%; }
+.big { font-size: 200%; }
+.big input { width: 5em; }
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<h1>
+    {{que_es}}
+    {{day|date:"D d F Y"}}
+    <div class="btn-group pull-right" role="group" aria-label="modo">
+        {% if previous_day %}
+        <a href="{% url url_dia previous_day.year previous_day.month previous_day.day cuales %}" class="btn btn-default"><i class="glyphicon glyphicon-backward"></i> día anterior</a>
+        {% endif %}
+        <a href="{% url url_dia day.year day.month day.day 'todas' %}" class="btn btn-default {% if cuales == 'todas' %}active{% endif %}"><i class="glyphicon glyphicon-question-sign"></i> Todas</a>
+        <a href="{% url url_dia day.year day.month day.day 'fuera' %}" class="btn btn-default {% if cuales == 'fuera' %}active{% endif %}"><i class="glyphicon glyphicon-remove-sign"></i> Informal</a>
+        <a href="{% url url_dia day.year day.month day.day 'caja' %}" class="btn btn-default {% if cuales == 'caja' %}active{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i> Solo cerradas</a>
+        {% if next_day %}
+        <a href="{% url url_dia next_day.year next_day.month next_day.day cuales %}" class="btn btn-default">día siguiente <i class="glyphicon glyphicon-forward"></i></a>
+        {% endif %}
+    </div>
+</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Num</th>
+            <th>Codigo</th>
+            <th>Hora entrada</th>
+            <th>Hora salida</th>
+            <th>Tiempo</th>
+            <th>€</th>
+            <th>operario</th>
+            <th>abonado</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in object_list %}
+        <tr>
+            {% if que_es == "entrada" %}
+            {% include "tickets/_entrada_row.html" %}
+            {% endif %}
+            {% if que_es == "salida" %}
+            {% include "tickets/_salida_row.html" %}
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}

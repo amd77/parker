@@ -1,0 +1,56 @@
+{% extends "common/parker.html" %}
+{% load crispy_forms_tags %}
+
+{% block extra_head %}
+<style>
+.superbig { font-size: 250%; }
+.big { font-size: 200%; }
+.big input { width: 5em; }
+</style>
+{% endblock extra_head %}
+
+{% block body %}
+<h1>
+    {{que_es}}
+    {{month|date:"F Y"}}
+    <div class="btn-group pull-right" role="group" aria-label="modo">
+        {% if previous_month %}
+        <a href="{% url url_mes previous_month.year previous_month.month cuales %}" class="btn btn-default"><i class="glyphicon glyphicon-backward"></i> mes anterior</a>
+        {% endif %}
+        <a href="{% url url_mes month.year month.month 'todas' %}" class="btn btn-default {% if cuales == 'todas' %}active{% endif %}"><i class="glyphicon glyphicon-question-sign"></i> Todas</a>
+        <a href="{% url url_mes month.year month.month 'fuera' %}" class="btn btn-default {% if cuales == 'caja' %}active{% endif %}"><i class="glyphicon glyphicon-remove-sign"></i> Informal</a>
+        <a href="{% url url_mes month.year month.month 'caja' %}" class="btn btn-default {% if cuales == 'caja' %}active{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i> Solo cerradas</a>
+        {% if next_month %}
+        <a href="{% url url_mes next_month.year next_month.month cuales %}" class="btn btn-default">mes siguiente <i class="glyphicon glyphicon-forward"></i></a>
+        {% endif %}
+    </div>
+</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Día</th>
+            {% if que_es == "entrada" %}
+            <th>Tickets dentro</th>
+            {% endif %}
+            <th>Tickets fuera</th>
+            {% for operario in operarios %}
+            <th>{{operario.user.username}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in fechas %}
+            <tr>
+                <td><a href="{% url url_dia obj.fecha.year obj.fecha.month obj.fecha.day cuales %}">{{obj.fecha|date:"d"}}</a></td>
+                {% if que_es == "entrada" %}
+                <td>{{obj.dentro.count}}</td>
+                {% endif %}
+                <td>{{obj.fuera.count}} ({{obj.fuera.euros}} €)</td>
+                {% for operario in obj.gente %}
+                <td>{{operario.count}} ({{operario.euros}} €)</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}

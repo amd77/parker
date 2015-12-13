@@ -7,8 +7,10 @@
 <li class="dropdown">
     <a data-toggle="dropdown" class="dropdown-toggle" href="#"><i class="glyphicon glyphicon-calendar"></i> Estadísticas<span class="caret"></a>
     <ul role="menu" class="dropdown-menu">
-        <li><a href="{% url 'estadisticas_day' now.year now.month now.day 'todas' %}">Hoy</a></li>
-        <li><a href="{% url 'estadisticas_month' now.year now.month 'todas' %}">Este mes</a></li>
+        <li><a href="{% url 'estadisticas_entrada_day' now.year now.month now.day 'todas' %}">Entradas hoy</a></li>
+        <li><a href="{% url 'estadisticas_salida_day' now.year now.month now.day 'todas' %}">Salidas hoy</a></li>
+        <li><a href="{% url 'estadisticas_entrada_month' now.year now.month 'todas' %}">Entradas este mes</a></li>
+        <li><a href="{% url 'estadisticas_salida_month' now.year now.month 'todas' %}">Salidas este mes</a></li>
     </ul>
 </li>
 {% endif %}
