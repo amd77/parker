@@ -15,12 +15,7 @@
                     <th>Hora entrada</th>
                     <th>Hora salida</th>
                     <th>Tiempo</th>
-                    <th>Minutos</th>
                     <th>€</th>
-                    <!--
-                    <th>Cambio</th>
-                    <th>Devolución</th>
-                    -->
                 </tr>
             </thead>
             <tbody>
@@ -29,8 +24,7 @@
                     <td>{{forloop.counter}}</td>
                     <td>{{object.entrada.fecha_post|date:'H:i:s'}}</td>
                     <td>{{object.fecha|date:'H:i:s'}}</td>
-                    <td>{{object.minutos_str}}</td>
-                    <td>{{object.minutos|floatformat:0}}</td>
+                    <td>{{object.duracion}}</td>
                     <td>{{object.euros|floatformat:2}}</td>
                 </tr>
                 {% endfor %}
