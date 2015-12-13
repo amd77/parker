@@ -9,17 +9,6 @@ import tempfile
 import datetime
 
 
-def _hhmm(minutos):
-    "Conversion de minutos a HH:MM"
-    minutos = int(minutos)
-    horas, minutos = minutos / 60, minutos % 60
-    dias, horas = horas / 24, horas % 24
-    if dias:
-        return "{} días {:02d}:{:02d}".format(dias, horas, minutos)
-    else:
-        return "{:02d}:{:02d}".format(horas, minutos)
-
-
 class Parking(models.Model):
     empresa = models.OneToOneField(Empresa)
     nombre = models.CharField(max_length=40)
@@ -50,9 +39,8 @@ class Parking(models.Model):
     def get_dia(self):
         return float(self.tarifa_set.last().precio)
 
-    def get_tarifa(self, minutos):
+    def get_tarifa(self, td):
         "Obtener una tarifa del tarifario"
-        td = datetime.timedelta(seconds=minutos*60)
         # calculo de dias completos
         precio_dias = td.days * self.get_dia()
         # calculo de la fraccion de dia

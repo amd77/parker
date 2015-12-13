@@ -74,12 +74,6 @@ def crea_tarifas(parking):
         Tarifa.objects.create(parking=parking, hora=hhmmss_to_timedelta(hora), precio=precio)
 
 
-def _minutos(hhmmss):
-    f1 = datetime.datetime.strptime(hhmmss, "%H:%M:%S")
-    f2 = datetime.datetime(1900, 1, 1)
-    return (f1-f2).total_seconds()/60
-
-
 class TestLogin(Base):
     def test_raiz_falla(self):
         client = self.client_class()
@@ -115,20 +109,25 @@ class TestTarifas(Base):
 
     def test_tarifario(self):
         for hhmmss, euros in TARIFAS:
-            self.assertEqual(self.parking.get_tarifa(_minutos(hhmmss)), euros)
+            self.assertEqual(self.parking.get_tarifa(hhmmss_to_timedelta(hhmmss)), euros)
 
     def test_minutos(self):
-        self.assertEqual(self.parking.get_tarifa(50), 0.8)
-        self.assertEqual(self.parking.get_tarifa(51), 0.9)
+        td = datetime.timedelta(seconds=51*60-1)
+        self.assertEqual(self.parking.get_tarifa(td), 0.8)
+        td = datetime.timedelta(seconds=51*60)
+        self.assertEqual(self.parking.get_tarifa(td), 0.9)
 
     def test_get_dia(self):
         self.assertEqual(self.parking.get_dia(), 6.0)
 
     def test_casi_un_dia(self):
-        self.assertEqual(self.parking.get_tarifa(24*60-1), 6.0)
+        td = datetime.timedelta(seconds=24*60*60-1)
+        self.assertEqual(self.parking.get_tarifa(td), 6.0)
 
     def test_un_dia(self):
-        self.assertEqual(self.parking.get_tarifa(24*60), 6.0)
+        td = datetime.timedelta(days=1)
+        self.assertEqual(self.parking.get_tarifa(td), 6.0)
 
     def test_dos_dias_y_pico(self):
-        self.assertEqual(self.parking.get_tarifa(2*24*60+10), 2*6.0+0.5)
+        td = datetime.timedelta(days=2, seconds=10*60)
+        self.assertEqual(self.parking.get_tarifa(td), 2*6.0+0.5)

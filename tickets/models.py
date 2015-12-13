@@ -4,9 +4,10 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 from empresa.models import Operario, Abonado, Factura
-from inventario.models import Expendedor, _hhmm
+from inventario.models import Expendedor
 from django.db.models import Sum
-# import datetime
+import datetime
+
 
 TZ = timezone.get_default_timezone()
 
@@ -78,7 +79,7 @@ class Salida(models.Model):
     "Recogida de un ticket en salida, con sus datos de cobro y factura si pide"
     entrada = models.OneToOneField(Entrada)
     fecha = models.DateTimeField()
-    minutos = models.FloatField()
+    duracion = models.DurationField()
     euros = models.FloatField(blank=True, null=True)
     operario = models.ForeignKey(Operario)
     abonado = models.ForeignKey(Abonado, blank=True, null=True)
@@ -90,10 +91,7 @@ class Salida(models.Model):
 
     def __unicode__(self):
         hora = self.fecha.strftime('%H:%M:%S')
-        return "{} = {:.0f} min (por {})".format(hora, self.minutos, self.operario.user.username)
-
-    def minutos_str(self):
-        return _hhmm(self.minutos)
+        return "{} = {} (por {})".format(hora, self.duracion, self.operario.user.username)
 
     def fecha_salida_str(self):
         if self.fecha.date() == self.entrada.fecha.date():
@@ -114,9 +112,10 @@ class Salida(models.Model):
         except AttributeError:
             pass
         fecha = timezone.now()
-        minutos = (fecha - entrada.fecha).total_seconds() / 60.0
-        euros = entrada.expendedor.parking.get_tarifa(minutos) if not abonado else 0.0
+        duracion = fecha - entrada.fecha
+        duracion = datetime.timedelta(days=duracion.days, seconds=duracion.seconds)  # quitar microseconds
+        euros = entrada.expendedor.parking.get_tarifa(duracion) if not abonado else 0.0
         return True, Salida.objects.create(entrada=entrada, fecha=fecha,
-                                           minutos=minutos, euros=euros,
+                                           duracion=duracion, euros=euros,
                                            operario=operario, abonado=abonado,
                                            perdido=perdido)

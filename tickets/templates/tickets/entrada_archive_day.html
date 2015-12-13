@@ -32,7 +32,6 @@
             <th>Hora entrada</th>
             <th>Hora salida</th>
             <th>Tiempo</th>
-            <th>Minutos</th>
             <th>€</th>
             <th>operario</th>
             <th>abonado</th>
@@ -45,10 +44,9 @@
         <tr>
             <td>{{forloop.counter}}</td>
             <td>{{object.codigo}}</td>
-            <td>{{object.fecha_post|date:'H:i:s'}}</td>
+            <td>{{object.fecha|date:'H:i:s'}}</td>
             <td>{{object.salida.fecha|date:'H:i:s'}}</td>
-            <td>{{object.salida.minutos_str}}</td>
-            <td>{{object.salida.minutos|floatformat:0}}</td>
+            <td>{{object.salida.duracion}}</td>
             <td>{{object.salida.euros|floatformat:2}}</td>
             <td>{{object.salida.operario.user.username}}</td>
             <td>{{object.salida.abonado|default:""}}</td>
