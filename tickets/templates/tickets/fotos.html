@@ -4,6 +4,7 @@
 {% block extra_head %}
 <style>
     div.button { position:absolute; right: 20px; bottom: 5px; }
+    div.button span { color: white; }
     div.pad { margin-bottom: 10px; }
 </style>
 {% endblock extra_head %}
@@ -21,7 +22,7 @@
             <div class="col-md-3 col-sm-4 col-xs-6 pad">
                 <img class="img-responsive" src="{{object.foto.url}}" />
                 <div class="button">
-                    <button class="btn btn-default btn-xs" name="cosa" value="{{object.codigo}}">{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></button>
+                    <span>{{object.codigo}}</span> <button class="btn btn-default btn-xs" name="cosa" value="{{object.codigo}}">{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></button>
                 </div>
             </div>
             {% endfor %}
