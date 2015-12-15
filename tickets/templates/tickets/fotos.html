@@ -20,7 +20,11 @@
             {% csrf_token %}
             {% for object in object_list %}
             <div class="col-md-3 col-sm-4 col-xs-6 pad">
+                {% if object.foto %}
                 <img class="img-responsive" src="{{object.foto.url}}" />
+                {% else %}
+                <img class="img-responsive" src="poner una imagen estatica" title="Sin foto" />
+                {% endif %}
                 <div class="button">
                     <span>{{object.codigo}}</span> <button class="btn btn-default btn-xs" name="cosa" value="{{object.codigo}}">{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></button>
                 </div>
