@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 from django.template import Library
 from django.core.urlresolvers import reverse
+from django.utils.html import mark_safe
 
 register = Library()
 
@@ -22,4 +23,4 @@ def admin(context, *objs):
                 model = obj.__class__.__name__.lower()
                 url = reverse('admin:{}_{}_change'.format(app, model), args=[obj.pk])
                 out += '<a href="{}" target="admin" title="edit {} (pk={})" class="pull-right"><span class="glyphicon glyphicon-pencil"></span></a>'.format(url, model, obj.pk)
-    return out
+    return mark_safe(out)
