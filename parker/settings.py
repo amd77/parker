@@ -166,8 +166,8 @@ LOGGING = {
     }
 }
 
-LOGIN_URL = "/parker/accounts/login"
-LOGOUT_URL = "/parker/accounts/logout"
+LOGIN_URL = "/parker/accounts/login/"
+LOGOUT_URL = "/parker/accounts/logout/"
 LOGIN_REDIRECT_URL = "/parker/"
 
 # Hack para fechas cortas en ifaz admin http://stackoverflow.com/questions/7216764/in-the-django-admin-site-how-do-i-change-the-display-format-of-time-fields
