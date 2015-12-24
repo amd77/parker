@@ -67,18 +67,19 @@ class CierreForm(forms.Form):
 
     def clean(self):
         d = super(CierreForm, self).clean()
-        total = d['billete_50'] * 50 + \
-            d['billete_20'] * 20 + \
-            d['billete_10'] * 10 + \
-            d['billete_5'] * 5 + \
-            d['moneda_2'] * 2 + \
-            d['moneda_1'] * 1 + \
-            d['moneda_50c'] * 0.50 + \
-            d['moneda_20c'] * 0.20 + \
-            d['moneda_10c'] * 0.10 + \
-            d['moneda_5c'] * 0.05 + \
-            d['moneda_2c'] * 0.02 + \
-            d['moneda_1c'] * 0.01
+        total = \
+            d.get('billete_50', 0) * 50 + \
+            d.get('billete_20', 0) * 20 + \
+            d.get('billete_10', 0) * 10 + \
+            d.get('billete_5', 0) * 5 + \
+            d.get('moneda_2', 0) * 2 + \
+            d.get('moneda_1', 0) * 1 + \
+            d.get('moneda_50c', 0) * 0.50 + \
+            d.get('moneda_20c', 0) * 0.20 + \
+            d.get('moneda_10c', 0) * 0.10 + \
+            d.get('moneda_5c', 0) * 0.05 + \
+            d.get('moneda_2c', 0) * 0.02 + \
+            d.get('moneda_1c', 0) * 0.01
         diferencia = d['euros'] - total
         if diferencia > 0.005:
             raise forms.ValidationError("La suma da {:.2f} y faltan {:.2f} €".format(total, diferencia))
