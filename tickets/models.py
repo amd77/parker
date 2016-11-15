@@ -79,7 +79,7 @@ class Salida(models.Model):
     "Recogida de un ticket en salida, con sus datos de cobro y factura si pide"
     entrada = models.OneToOneField(Entrada)
     fecha = models.DateTimeField()
-    duracion = models.DurationField()
+    duracion = models.DurationField(blank=True, null=True)
     euros = models.FloatField(blank=True, null=True)
     operario = models.ForeignKey(Operario)
     abonado = models.ForeignKey(Abonado, blank=True, null=True)
