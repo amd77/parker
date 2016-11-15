@@ -155,6 +155,7 @@ class EntradaArchiveMixin(ArchiveMixin):
             qs = qs.filter(salida__isnull=True)
         else:
             pass
+        qs = qs.select_related("salida", "salida__operario")
         return qs.order_by(self.date_field)
 
 
