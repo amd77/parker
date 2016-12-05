@@ -30,6 +30,9 @@ class Operario(models.Model):
     def __unicode__(self):
         return "{} de {}".format(self.user.username, self.empresa.nombre)
 
+    @property
+    def coches_facturados_hoy(self):
+        return self.salida_set.de_hoy().count()
 
 class Abonado(models.Model):
     empresa = models.ForeignKey(Empresa)
