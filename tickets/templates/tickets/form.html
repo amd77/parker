@@ -36,6 +36,13 @@
                         {% endif %}
                     </dl>
                     <dl class="dl-horizontal">
+                        {% if entrada.foto %}
+                            <img class="img-responsive" style="height:12em;" src="{{entrada.foto.url}}" />
+                            {% else %}
+                            <img class="img-responsive" style="height:12em;" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEiIHdpZHRoPSI3ODAiIGhlaWdodD0iMzYwIj48cGF0aCBkPSJNMjE1IDI3MC43YzAgMzIuNy0yNi42IDU5LjItNTkuMyA1OS4yLTMyLjcgMC01OS4yLTI3LTU5LjItNjBzMjYuNS01OSA1OS4yLTU5IDU5LjMgMjcgNTkuMyA1OS42eiIvPjxwYXRoIGQ9Ik0zNDQuNyA0NC41YzMtMy43IDYuNy02LjggMTMuMy02LjRoMjMyLjZMNzIzIDE1NGMxLjYgMy4zIDIuNCA2IDIuOCA4bDE0LjUgOTguMmMtMi42IDUuNi01LjcgMTAuNS0xMS4zIDExaC0zM2MwLTk4LTE0NS05OC4yLTE0NSAwSDIyOWMwLTk3LjYtMTQ2LTk4LTE0NiAwSDUxYy0zLjUtMS42LTYuNi0uMi0xMS0xMS43bDcuNC03NmMyLjQtNi42IDUuMy05IDguMi0xMS43bDE5My40LTMxeiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PHBhdGggZD0iTTY4Mi4yIDI3MC43YzAgMzIuNy0yNi42IDU5LjItNTkuMyA1OS4yLTMzIDAtNjAtMjctNjAtNjBzMjctNTkgNTkuNS01OSA1OS4yIDI2LjYgNTkuMiA1OS4zeiIvPjxwYXRoIGQ9Ik02MjcuNCAxMzIuN0w1NjguMiA3MWMtMS42LTEuMi0yLjgtMy01LjYtMi43aC04OC44djg2LjNoMTYyYzguNi0xLjctMi44LTEzLjQtOC40LTIyem0tMzQ1LjIgOUwzNDkuNiA3MWMxLjYtMS4yIDMtMyA1LjctMi43aDk1djg2LjNIMjg3LjZjLTcuNi0zLTguNi03LjUtNS41LTEzeiIgZmlsbD0iI2ZmZiIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+" title="Sin foto" />
+                        {% endif %}
+                    </dl>
+                    <dl class="dl-horizontal">
                         <dt>Codigo</dt>
                         <dd>{{entrada.codigo}}</dd>
                         <dt>Entrada</dt>
