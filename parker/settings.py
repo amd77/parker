@@ -137,35 +137,6 @@ INSTALLED_APPS = (
     'django_extensions',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': True,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler',
-            'include_html': True,
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': False,
-        },
-    }
-}
 
 LOGIN_URL = "/parker/accounts/login/"
 LOGOUT_URL = "/parker/accounts/logout/"
@@ -182,8 +153,36 @@ SERVER_EMAIL = "parker@" + socket.getfqdn(socket.gethostname())
 CRISPY_TEMPLATE_PACK = "bootstrap3"
 AMQP_CONFIG = {'AMQP_URI': 'amqp://guest:guest@localhost'}
 
+LOG_LEVEL = 'DEBUG'
+LOG_ROOT = BASE_DIR
+
 
 try:
     from parker.settings_local import *
 except ImportError:
     pass
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(name)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': LOG_LEVEL,
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_ROOT, LOG_LEVEL.lower() + '.log'),
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file'],
+            'level': LOG_LEVEL,
+            'propagate': True,
+        },
+    },
+}
