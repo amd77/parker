@@ -1,5 +1,6 @@
 DEBUG = False
 TEMPLATE_DEBUG = False
+LOG_LEVEL = 'WARNING'
 ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.36', 'localhost', 'parker00.kreitek.org', 'andensinlimite.noip.me']
 ALLOWED_HOSTS = ['*']
 STATIC_ROOT = '/var/www/parker/static/'
@@ -11,17 +12,17 @@ MEDIA_ROOT = "/media/usbstore"
 MEDIA_URL = '/parker_media/'
 STATIC_URL = '/parker_static/'
 
-SERVER_EMAIL = EMAIL_FROM = "django@parker00.kreitek.org"
-EMAIL_SUBJECT_PREFIX = "[parker00] "
+SERVER_EMAIL = EMAIL_FROM = "django@parker0.kreitek.org"
+EMAIL_SUBJECT_PREFIX = "[parker0] "
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'django',
-#         'USER': 'django',                      # Not used with sqlite3.
-#         'PASSWORD': 'django',                  # Not used with sqlite3.
-#         'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
-#         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'django',
+        'USER': 'django',                      # Not used with sqlite3.
+        'PASSWORD': 'django',                  # Not used with sqlite3.
+        'HOST': 'localhost',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
