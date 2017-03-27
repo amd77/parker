@@ -93,18 +93,6 @@ class Salida(models.Model):
         hora = self.fecha.strftime('%H:%M:%S')
         return "{} = {} (por {})".format(hora, self.duracion, self.operario.user.username)
 
-    def fecha_salida_str(self):
-        if self.fecha.date() == self.entrada.fecha.date():
-            return self.fecha.time()
-        else:
-            return self.fecha
-
-    def fecha_entrada_str(self):
-        if self.fecha.date() == self.entrada.fecha.date():
-            return self.entrada.fecha.time()
-        else:
-            return self.entrada.fecha
-
     @staticmethod
     def crea_por_entrada(entrada, operario, abonado=None, perdido=False):
         try:

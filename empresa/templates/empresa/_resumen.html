@@ -7,5 +7,6 @@
                 <li>{{operario.coches_facturados_hoy|default:0}} coche{{operario.coches_facturados_hoy|pluralize}} facturado{{operario.coches_facturados_hoy|pluralize}} hoy</li>
                 <!--<li>{{parking.coches_hoy|default:0}} coches gestionados hoy</li>-->
                 <li>Operario actual: {{operario.user}}</li>
+                <li>Hora actual: {% now "H:i:s" %}</li>
             </ul>
 

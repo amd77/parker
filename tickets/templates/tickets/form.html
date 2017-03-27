@@ -46,9 +46,9 @@
                         <dt>Codigo</dt>
                         <dd>{{entrada.codigo}}</dd>
                         <dt>Entrada</dt>
-                        <dd>{{salida.fecha_entrada_str}}</dd>
+                        <dd>{{entrada.fecha|time:"H:i:s"}}</dd>
                         <dt>Salida</dt>
-                        <dd>{{salida.fecha_salida_str}}</dd>
+                        <dd>{{salida.fecha|time:"H:i:s"}}</dd>
                         <dt>Resta</dt>
                         <dd>{{salida.duracion}}</dd>
                         {% if salida.abonado %}
