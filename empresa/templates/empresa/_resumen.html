@@ -9,4 +9,16 @@
                 <li>Operario actual: {{operario.user}}</li>
                 <li>Hora actual: {% now "H:i:s" %}</li>
             </ul>
-
+			<hr/>
+			<div class="row">
+				<div class="col-md-6">
+					{% for barrera in parking.barreras_entrada %}
+					{% include "empresa/_botonera.html" %}
+					{% endfor %}
+				</div>
+				<div class="col-md-6">
+					{% for barrera in parking.barreras_salida %}
+					{% include "empresa/_botonera.html" %}
+					{% endfor %}
+				</div>
+			</div>

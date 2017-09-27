@@ -4,3 +4,4 @@ pytz
 django-extensions
 django-crispy-forms
 Pillow
+requests

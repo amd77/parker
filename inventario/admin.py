@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Tarifa, Expendedor, Parking
+from .models import Tarifa, Expendedor, Barrera, Parking
+
+
+class BarreraInline(admin.StackedInline):
+    model = Barrera
+    extra = 0
 
 
 class ExpendedorInline(admin.TabularInline):
@@ -14,6 +19,6 @@ class TarifaInline(admin.TabularInline):
 
 class ParkingAdmin(admin.ModelAdmin):
     list_display = ('nombre', 'plazas', 'empresa')
-    inlines = (ExpendedorInline, TarifaInline)
+    inlines = (BarreraInline, ExpendedorInline, TarifaInline)
 
 admin.site.register(Parking, ParkingAdmin)

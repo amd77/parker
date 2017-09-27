@@ -1,0 +1,13 @@
+<!-- FIXME esto es cutre, lo mejor seria via AJAX -->
+<div class="btn-group" role="group">
+    {% if barrera.abre_url %}
+    <a type="button" class="btn btn-default" href="{% url 'barrera_comando' barrera.slug 'abre' %}" title="Abre"><i class="glyphicon glyphicon-chevron-up"></i></a>
+    {% endif %}
+    {% if barrera.abresiempre_url %}
+    <a type="button" class="btn btn-default" href="{% url 'barrera_comando' barrera.slug 'abresiempre' %}" title="Abre siempre"><i class="glyphicon glyphicon-eject"></i></a>
+    {% endif %}
+    {% if barrera.cierra_url %}
+    <a type="button" class="btn btn-default" href="{% url 'barrera_comando' barrera.slug 'cierra' %}" title="Cierra"><i class="glyphicon glyphicon-chevron-down"></i></a>
+    {% endif %}
+    <a type="button" class="btn btn-default disabled" href="#">{{barrera.nombre|default:barrera.slug}}</a>
+</div>

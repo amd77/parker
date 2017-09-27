@@ -4,9 +4,11 @@ from __future__ import unicode_literals
 from django.db import models
 from django.apps import apps
 from empresa.models import Empresa
+import json
 import os
 import tempfile
 import datetime
+import requests
 
 
 class Parking(models.Model):
@@ -49,6 +51,12 @@ class Parking(models.Model):
             if min0 <= td < min1:
                 return precio_dias + float(precio)
 
+    def barreras_entrada(self):
+        return self.barrera_set.filter(entrada=True)
+
+    def barreras_salida(self):
+        return self.barrera_set.filter(entrada=False)
+
     @property
     def entrada_set(self):
         Entrada = apps.get_model('tickets.Entrada')
@@ -86,6 +94,47 @@ class Expendedor(models.Model):
     class Meta:
         verbose_name = 'expendedor'
         verbose_name_plural = 'expendedores'
+
+
+class Barrera(models.Model):
+    parking = models.ForeignKey(Parking)
+    nombre = models.CharField(max_length=40)
+    slug = models.CharField(max_length=40, unique=True)
+    entrada = models.BooleanField()
+    abre_url = models.URLField(max_length=40, blank=True, null=True, help_text="si hay url es que esta activo")
+    abre_post = models.CharField(max_length=40, blank=True, null=True, help_text="post data en formato json")
+    abresiempre_url = models.URLField(max_length=40, blank=True, null=True, help_text="si hay url es que esta activo")
+    abresiempre_post = models.CharField(max_length=40, blank=True, null=True, help_text="post data en formato json")
+    cierra_url = models.URLField(max_length=40, blank=True, null=True, help_text="si hay url es que esta activo")
+    cierra_post = models.CharField(max_length=40, blank=True, null=True, help_text="post data en formato json")
+
+    def abre(self):
+        if self.abre_post:
+            r = requests.post(self.abre_url, data=json.loads(self.abre_post))
+        else:
+            r = requests.get(self.abre_url)
+        return r.status_code == 200
+
+    def abresiempre(self):
+        if self.abresiempre_post:
+            r = requests.post(self.abresiempre_url, data=json.loads(self.abresiempre_post))
+        else:
+            r = requests.get(self.abresiempre_url)
+        return r.status_code == 200
+
+    def cierra(self):
+        if self.cierra_post:
+            r = requests.post(self.cierra_url, data=json.loads(self.cierra_post))
+        else:
+            r = requests.get(self.cierra_url)
+        return r.status_code == 200
+
+    def __unicode__(self):
+        return "{} ({} de {})".format(self.slug, "entrada" if self.entrada else "salida", self.parking.nombre)
+
+    class Meta:
+        verbose_name = 'barrera'
+        verbose_name_plural = 'barreras'
 
 
 class Tarifa(models.Model):
