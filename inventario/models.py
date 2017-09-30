@@ -101,12 +101,12 @@ class Barrera(models.Model):
     nombre = models.CharField(max_length=40)
     slug = models.CharField(max_length=40, unique=True)
     entrada = models.BooleanField()
-    abre_url = models.URLField(max_length=40, blank=True, null=True, help_text="si hay url es que esta activo")
-    abre_post = models.CharField(max_length=40, blank=True, null=True, help_text="post data en formato json")
-    abresiempre_url = models.URLField(max_length=40, blank=True, null=True, help_text="si hay url es que esta activo")
-    abresiempre_post = models.CharField(max_length=40, blank=True, null=True, help_text="post data en formato json")
-    cierra_url = models.URLField(max_length=40, blank=True, null=True, help_text="si hay url es que esta activo")
-    cierra_post = models.CharField(max_length=40, blank=True, null=True, help_text="post data en formato json")
+    abre_url = models.URLField(max_length=100, blank=True, null=True, help_text="si hay url es que esta activo")
+    abre_post = models.CharField(max_length=100, blank=True, null=True, help_text="post data en formato json")
+    abresiempre_url = models.URLField(max_length=100, blank=True, null=True, help_text="si hay url es que esta activo")
+    abresiempre_post = models.CharField(max_length=100, blank=True, null=True, help_text="post data en formato json")
+    cierra_url = models.URLField(max_length=100, blank=True, null=True, help_text="si hay url es que esta activo")
+    cierra_post = models.CharField(max_length=100, blank=True, null=True, help_text="post data en formato json")
 
     def abre(self):
         if self.abre_post:
