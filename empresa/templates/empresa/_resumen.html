@@ -21,4 +21,9 @@
 					{% include "empresa/_botonera.html" %}
 					{% endfor %}
 				</div>
+				<div class="col-md-6">
+					{% for nodo in parking.nodoremoto %}
+					{% include "empresa/_botonera_rabitmq.html" %}
+					{% endfor %}
+				</div>
 			</div>

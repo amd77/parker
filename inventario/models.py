@@ -150,6 +150,32 @@ class Tarifa(models.Model):
         ordering = ('hora', )
 
 
+class NodoRemoto(models.Model):
+    parking = models.ForeignKey(Parking)
+    host_name = models.CharField(max_length = 100, blank = True, null = True, help_text = 'Nombre del Host')
+    url = models.CharField(max_length = 100, blank=True, null=True, help_text = ' url del demonio nameko' )
+    nombre = models.CharField(max_length=100, blank=True, null=True, help_text = 'Nombre del demonio nameko')
+
+    def __unicode__(self):
+        return "{} [{}]".format(self.nombre, self.url)
+
+    class Meta:
+        verbose_name = 'Nodo Remoto'
+        verbose_name_plural = 'Nodos Remotos'
+
+class ComandoRemoto(models.Model):
+    nombre = models.CharField(max_length = 100, blank=True, null=True, help_text = 'nombre del comando')
+    comando = models.CharField(max_length = 100, blank=True, null=True, help_text= 'comando')
+    nodoremoto = models.ForeignKey(NodoRemoto)
+
+    def __unicode__(self):
+        return "{}: {}.{}()".format(self.nombre, self.nodoremoto, self.comando)
+
+    class Meta:
+        verbose_name = 'comando Remoto'
+        verbose_name_plural = 'Comandos Remotos'
+
+
 # from django.db.models.signals import pre_save
 # from django.dispatch import receiver
 # @receiver(pre_save, sender=Tarifa)

@@ -1,0 +1,6 @@
+<!-- FIXME esto es cutre, lo mejor seria via AJAX -->
+<div class="btn-group" role="group">
+    {% for comando in nodo.comandoremoto %}
+    <a type="button" class="btn btn-default" href="#">{{comando.nombre|default:comando.comando}}</a>
+    {% enfor %}
+</div>
