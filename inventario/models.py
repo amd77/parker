@@ -57,6 +57,9 @@ class Parking(models.Model):
     def barreras_salida(self):
         return self.barrera_set.filter(entrada=False)
 
+    def nodos_remotos(self):
+        return self.nodoremoto_set.all()
+
     @property
     def entrada_set(self):
         Entrada = apps.get_model('tickets.Entrada')
@@ -158,6 +161,9 @@ class NodoRemoto(models.Model):
 
     def __unicode__(self):
         return "{} [{}]".format(self.nombre, self.url)
+
+    def comandos(self):
+        return self.comandoremoto_set.all() 
 
     class Meta:
         verbose_name = 'Nodo Remoto'
