@@ -2,6 +2,7 @@
 
 from django.http import Http404
 from django.views.generic import TemplateView, RedirectView
+from django.contrib import messages
 from empresa.views import OperarioMixin
 from .models import Barrera, NodoRemoto, ComandoRemoto
 from nameko.standalone.rpc import ClusterRpcProxy
@@ -50,7 +51,10 @@ class NodoRemotoComando(OperarioMixin, RedirectView):
                 REMOTO = "{}".format(nodo.host_name)
                 eval_str="getattr(cluster_rpc, REMOTO).{}()".format(comando.comando)
                 print("Lanzado en nodo {} comando {}".format(REMOTO, comando.comando))
-                print(eval(eval_str))
+                result = eval(eval_str)
+                print(result)
+                messages.add_message(self.request, messages.INFO, "{}.{}() = {}". \
+                    format(nodo.host_name, comando.comando, result))
         except Exception as e:
             # TODO: Emitir evento fallo en red expendedor-barrera
             print("ERROR: Communication with node {} failed.".format(nodo.nombre))

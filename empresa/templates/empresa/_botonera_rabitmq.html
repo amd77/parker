@@ -1,7 +1,18 @@
+{% load contains_tag %}
+
 <!-- FIXME esto es cutre, lo mejor seria via AJAX -->
 <div class="btn-group" role="group">
     {% for comando in nodo.comandos %}
-    <a type="button" class="btn btn-default" href="{% url 'nodoremoto_comando' nodo.host_name comando.comando %}">{{comando.nombre|default:comando.comando | safe}}</a>
+    <a type="button" class="btn btn-default"
+    	style="
+    	{% if messages %}
+    	{% for message in messages %}
+    	{% if message|str_contains:"[OK]" and message|str_contains:nodo.host_name and message|func_contains:comando.comando %} 
+    	color: green;
+    	{% endif %}
+        {% endfor %}
+		{% endif %}"
+	href="{% url 'nodoremoto_comando' nodo.host_name comando.comando %}">{{comando.nombre|default:comando.comando | safe}}</a>
     {% endfor %}
     <a type="button" class="btn btn-default disabled" href="#">{{nodo.nombre|default:nodo.host_name}}</a>
 </div>
