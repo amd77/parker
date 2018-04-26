@@ -75,7 +75,8 @@ class Expendedor(models.Model):
     parking = models.ForeignKey(Parking)
     nombre = models.CharField(max_length=40)
     mac = models.CharField(max_length=17)
-    camera_command = models.CharField(max_length=255, blank=True, null=True, help_text="Comando para la camara, con {} donde queramos poner el output filename")
+    camera_command = models.CharField(max_length=255, blank=True, null=True, help_text="Comando para la camara, "
+                                      "con {} donde queramos poner el output filename")
 
     def saca_foto(self):
         contenido = None
