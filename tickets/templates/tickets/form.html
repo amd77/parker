@@ -127,6 +127,15 @@
             if (el[0].value.length >= 13)
                 alert("Dale a 'Abrir barrera' y vuelve a pasar el ticket!!");
         });
+
+		{% if entrada and salida %}
+		var valor = "{{salida.euros|floatformat:2}}";
+		$.get("//localhost:8088/" + valor);
+		console.log("enviado " + valor);
+		{% else %}
+		$.get("//localhost:8088/borrar");
+		console.log("display borrado");
+		{% endif %}
     });
     </script>
 {% endblock extra_foot %}
