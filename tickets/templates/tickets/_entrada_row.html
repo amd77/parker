@@ -7,6 +7,7 @@
             <td>{{object.salida.euros|floatformat:2}}</td>
             <td>{{object.salida.operario.user.username}}</td>
             <td>{{object.salida.abonado|default:""}}</td>
+            <td><A href="{{object.foto}}"><i class="glyphicon glyphicon-camera"></i></A></td>
             <td>{% if object.salida.perdido %}<a title="Ticket olvidado"><i class="glyphicon glyphicon-film"></i></a>{% endif %}</td>
             <td>{% if object.salida.fecha_caja %}<a title="Cierre de caja"><i class="glyphicon glyphicon-ok"></i></a>{% endif %}</td>
 

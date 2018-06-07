@@ -2,7 +2,7 @@
 from django.utils import timezone
 # from django.views.generic import View, TemplateView, UpdateView
 from django.views.generic import ListView, RedirectView
-from .models import Registro
+from models import Registro
 from django.core.urlresolvers import reverse
 
 
