@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-from django.views.generic import View, FormView
+from django.views.generic import View, FormView, ListView
 from django.views.generic.dates import TodayArchiveView, DayArchiveView, MonthArchiveView
 from django.utils import timezone
 from django.core.files.base import ContentFile
@@ -236,3 +236,18 @@ class FotoToday(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
 
 class FotoDayList(OperarioMixin, EntradaArchiveMixin, DayArchiveView):
     template_name = "tickets/fotos.html"
+
+
+class FotoDentro(OperarioMixin, ListView):
+    model = Entrada
+    que_es = "entrada"
+    template_name = "tickets/fotos.html"
+    paginate_by = 50
+
+    def get_queryset(self):
+        qs = super(FotoDentro, self).get_queryset()
+        qs = qs.filter(expendedor__parking=self.parking)
+        qs = qs.filter(salida__isnull=True)
+        qs = qs.filter(fecha_post__gt = timezone.now() - datetime.timedelta(days=5))
+        qs = qs.select_related("salida", "salida__operario")
+        return qs

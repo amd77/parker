@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^api/create$', csrf_exempt(v.CreatePost.as_view()), name="ticket_create"),
     url(r'^api/update$', csrf_exempt(v.UpdatePost.as_view()), name="ticket_update"),
     url(r'^cierre$', v.CierreView.as_view(), name="ticket_cierre"),
+    url(r'^fotos/dentro$', v.FotoDentro.as_view(), name="fotos_dentro"),
     url(r'^fotos/(?P<cuales>\w*)$', v.FotoToday.as_view(), name="fotos_today"),
     url(r'^estadisticas/entrada/$', v.EntradaTodayList.as_view(), name="estadisticas_entrada_today"),
     url(r'^estadisticas/entrada/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<cuales>\w*)$', v.EntradaDayList.as_view(), name="estadisticas_entrada_day"),
