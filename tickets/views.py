@@ -232,3 +232,7 @@ class SalidaMonthList(OperarioMixin, ResumenMensualMixin, SalidaArchiveMixin, Mo
 
 class FotoToday(OperarioMixin, EntradaArchiveMixin, TodayArchiveView):
     template_name = "tickets/fotos.html"
+
+
+class FotoDayList(OperarioMixin, EntradaArchiveMixin, DayArchiveView):
+    template_name = "tickets/fotos.html"

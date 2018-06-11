@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^estadisticas/salida/$', v.SalidaTodayList.as_view(), name="estadisticas_salida_today"),
     url(r'^estadisticas/salida/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<cuales>\w*)$', v.SalidaDayList.as_view(), name="estadisticas_salida_day"),
     url(r'^estadisticas/salida/(?P<year>\d+)/(?P<month>\d+)/(?P<cuales>\w*)$', v.SalidaMonthList.as_view(), name="estadisticas_salida_month"),
+    url(r'^fotos/(?P<year>\d+)/(?P<month>\d+)/(?P<day>\d+)/(?P<cuales>\w*)$', v.FotoDayList.as_view(), name="fotos_day_list"),
+
 ]

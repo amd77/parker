@@ -20,6 +20,9 @@
         <a href="{% url url_dia day.year day.month day.day 'todas' %}" class="btn btn-default {% if cuales == 'todas' %}active{% endif %}"><i class="glyphicon glyphicon-question-sign"></i> Todas</a>
         <a href="{% url url_dia day.year day.month day.day 'fuera' %}" class="btn btn-default {% if cuales == 'fuera' %}active{% endif %}"><i class="glyphicon glyphicon-remove-sign"></i> Informal</a>
         <a href="{% url url_dia day.year day.month day.day 'caja' %}" class="btn btn-default {% if cuales == 'caja' %}active{% endif %}"><i class="glyphicon glyphicon-ok-sign"></i> Solo cerradas</a>
+        {% if que_es == "entrada" %}
+        <a href="{% url 'fotos_day_list' day.year day.month day.day 'todos' %}" class="btn btn-default"><i class="glyphicon glyphicon-camera"></i> Fotos</a>
+        {% endif %}
         {% if next_day %}
         <a href="{% url url_dia next_day.year next_day.month next_day.day cuales %}" class="btn btn-default">día siguiente <i class="glyphicon glyphicon-forward"></i></a>
         {% endif %}
