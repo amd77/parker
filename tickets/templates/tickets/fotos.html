@@ -11,6 +11,7 @@
 
 {% block body %}
 <div class="container-fluid">
+{{now}}
     {% if is_paginated %}
     <h1>Fotos de los {{page_obj.paginator.count}} coches que hay {{cuales}}</h1>
     {% else %}
@@ -30,7 +31,7 @@
                 <img class="img-responsive" src="poner una imagen estatica" title="Sin foto" />
                 {% endif %}
                 <div class="button">
-                    <span>{{object.codigo}}</span> <button class="btn btn-default btn-xs" name="cosa" value="{{object.codigo}}">{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></button>
+                    <span>{{object.codigo}}</span> <button class="btn btn-default btn-xs" name="cosa" value="{{object.codigo}}">{% if now.date != object.fecha_post.date %}Dia {{object.fecha_post|date:"d"}} {% endif %}{{object.fecha_post|date:'H:i:s'}} <i class="glyphicon gliphicon-circle-arrow-right"></i></button>
                 </div>
             </div>
             {% endfor %}

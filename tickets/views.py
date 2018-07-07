@@ -244,6 +244,11 @@ class FotoDentro(OperarioMixin, ListView):
     template_name = "tickets/fotos.html"
     paginate_by = 50
 
+    def get_context_data(self, **kwargs):
+        context = super(FotoDentro, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        return context
+
     def get_queryset(self):
         qs = super(FotoDentro, self).get_queryset()
         qs = qs.filter(expendedor__parking=self.parking)
