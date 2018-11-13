@@ -12,7 +12,7 @@ from empresa.views import OperarioMixin
 from django.db.models import Sum
 from .models import Entrada, Salida
 from .forms import TicketForm, CierreForm
-from inventario.models import Expendedor
+from inventario.models import Expendedor, Visor
 from empresa.models import Abonado, Operario
 
 
@@ -118,6 +118,10 @@ class TicketFormView(OperarioMixin, FormView):
             context['entrada'] = entrada
             context['salida'] = salida
             context['creado'] = creado
+            # ĺlamar al visor externo para que muestre precio
+            visor = Visor.objects.filter(parking=self.parking).first()
+            if visor is not None:
+                visor.mostrar_importe(salida.euros)
         else:
             form.data['cobrar'] = '1'
             context['form'] = form

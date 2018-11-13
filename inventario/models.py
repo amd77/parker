@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+from __future__ import unicode_literals, print_function
 from django.db import models
 from django.apps import apps
 from empresa.models import Empresa
@@ -169,6 +169,7 @@ class NodoRemoto(models.Model):
         verbose_name = 'Nodo Remoto'
         verbose_name_plural = 'Nodos Remotos'
 
+
 class ComandoRemoto(models.Model):
     nombre = models.CharField(max_length = 100, blank=True, null=True, help_text = 'nombre del comando')
     comando = models.CharField(max_length = 100, blank=True, null=True, help_text= 'comando')
@@ -188,3 +189,21 @@ class ComandoRemoto(models.Model):
 # def anula_date(sender, instance, using, **kwargs):
 #     if isinstance(instance, datetime.datetime):
 #         instance.hora = instance.hora.replace(year=1970, month=1, day=1)
+
+
+class Visor(models.Model):
+    url = models.URLField(default="http://192.168.1.1:8000")
+    descripcion = models.CharField(default="visor colocado en ...", max_length=200)
+    parking = models.ForeignKey(Parking)
+
+    def mostrar_importe(self, importe):
+        imprte_str = "{:.2f}".format(importe)
+        # print("importe " + imprte_str)
+        r = requests.post(self.url, json={"importe": importe})
+        return r.status_code == 200
+
+    def __str__(self):
+        return self.descripcion
+
+    class Meta:
+        verbose_name_plural = 'Visores'

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tarifa, Expendedor, Barrera, Parking, NodoRemoto, ComandoRemoto
+from .models import Tarifa, Expendedor, Barrera, Parking, NodoRemoto, ComandoRemoto, Visor
 
 
 class BarreraInline(admin.StackedInline):
@@ -34,3 +34,4 @@ class ParkingAdmin(admin.ModelAdmin):
 
 admin.site.register(Parking, ParkingAdmin)
 admin.site.register(NodoRemoto, RemotoAdmin)
+admin.site.register(Visor)

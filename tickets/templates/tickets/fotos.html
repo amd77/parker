@@ -11,7 +11,7 @@
 
 {% block body %}
 <div class="container-fluid">
-{{now}}
+    Pagina generada en {{now}}
     {% if is_paginated %}
     <h1>Fotos de los {{page_obj.paginator.count}} coches que hay {{cuales}}</h1>
     {% else %}
