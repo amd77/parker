@@ -93,7 +93,7 @@
             {% else %}
                 <div class="col-md-12">
                     <div class="btn-group btn-group-lg btn-group-justified" role="group">
-                        {% with barrera=parking.barreras_entrada.first %}
+                        {% with barrera=parking.barreras_salida.first %}
                             {% if barrera and barrera.abre_url %}
                                 <a role="button" class="btn btn-success" href="{% url 'barrera_comando' barrera.slug 'abre' %}">Abrir barrera</a>
                             {% endif %}
