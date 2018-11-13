@@ -199,6 +199,10 @@ class Visor(models.Model):
     def mostrar_importe(self, importe):
         imprte_str = "{:.2f}".format(importe)
         # print("importe " + imprte_str)
+        try:
+            r = requests.post(self.url, json={"importe": importe})
+        except:
+            return False
         r = requests.post(self.url, json={"importe": importe})
         return r.status_code == 200
 

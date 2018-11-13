@@ -93,7 +93,11 @@
             {% else %}
                 <div class="col-md-12">
                     <div class="btn-group btn-group-lg btn-group-justified" role="group">
-                        <a role="button" class="btn btn-success" href="{% url 'inicio' %}?abre=si">Abrir barrera</a>
+                        {% with barrera=parking.barreras_entrada.first %}
+                            {% if barrera and barrera.abre_url %}
+                                <a role="button" class="btn btn-success" href="{% url 'barrera_comando' barrera.slug 'abre' %}">Abrir barrera</a>
+                            {% endif %}
+                        {% endwith %}
                         <a role="button" class="btn btn-danger" href="{% url 'inicio' %}">No abrir barrera</a>
                     </div>
                 </div>
