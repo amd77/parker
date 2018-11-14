@@ -39,11 +39,11 @@ class NodoRemotoComando(OperarioMixin, RedirectView):
     def get_redirect_url(self, *args, **kwargs):
         try:
             nodo = NodoRemoto.objects.get(host_name = self.kwargs['hostname'])
-        except:
+        except NodoRemoto.DoesNotExist:
             raise Http404("Nodo Desconocido")
         try:
-            comando = ComandoRemoto.objects.get(comando = self.kwargs['comando'])
-        except:
+            comando = nodo.comandoremoto_set.get(comando=self.kwargs['comando'])
+        except ComandoRemoto.DoesNotExist:
             raise Http404("Comando Desconocido")
         try:
             AMQP_URI = {'AMQP_URI': nodo.url}
